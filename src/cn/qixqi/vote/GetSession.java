@@ -3,7 +3,7 @@
  * 2. json 中不允许单引号
  */
 
-package club.qixqi.vote;
+package cn.qixqi.vote;
 
 import java.util.Locale;
 import java.util.List;

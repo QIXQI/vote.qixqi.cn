@@ -1,4 +1,4 @@
-package club.qixqi.vote;
+package cn.qixqi.vote;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+
+import cn.qixqi.vote.entity.Teacher;
 
 import com.alibaba.fastjson.JSONObject;
 

@@ -1,4 +1,4 @@
-package club.qixqi.vote;
+package cn.qixqi.vote.entity;
 
 public class Teacher{
     private String id;

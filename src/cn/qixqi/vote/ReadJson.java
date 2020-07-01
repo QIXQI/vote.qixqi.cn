@@ -3,7 +3,7 @@
  * 2. 读取 teachers.json 时文件路径问题，需要导入 servlet，不太好
  */
 
-package club.qixqi.vote;
+package cn.qixqi.vote;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -23,6 +23,8 @@ import javax.sql.DataSource;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.stream.JsonReader;
+
+import cn.qixqi.vote.entity.Teacher;
 
 /**
  * 相当于一个工具类，静态函数，读取Json中的信息

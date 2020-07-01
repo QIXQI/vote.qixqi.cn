@@ -4,7 +4,7 @@
         auth="Container"
         type="javax.sql.DataSource"
         driverClassName="com.mysql.cj.jdbc.Driver"
-        url="jdbc:mysql://localhost:3306/j2ee?useSSL=false&amp;serverTimezone=UTC"
+        url="jdbc:mysql://qixqi.club:9086/vote?useSSL=false&amp;serverTimezone=UTC"
         username="root"
         password="1214"
         maxActive="100"

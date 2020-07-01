@@ -20,6 +20,19 @@ javac -Djava.ext.dirs=lib/ src/club/qixqi/vote/*.java
 视图解析器 InternalResourceViewResolver 为什么能访问到 /WEB-INF/jsp/下的文件，还是只是浏览器不能通过 url 访问 /WEB-INF/jsp/ 下的文件
 
 
+# docker 端口映射
+1. nginx 
+	* http: 9080 --> 80
+	* https: 9081 --> 443
+2. tomcat1
+	* http: 9082 --> 8080
+	* https: 9083 --> 8443
+3. tomcat2
+	* http: 9084 --> 8080
+	* https: 9085 --> 8443
+4. mysql
+	* 9086 --> 3306
+
 
 ## 后续
 

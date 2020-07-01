@@ -1,4 +1,4 @@
-package club.qixqi.vote;
+package cn.qixqi.vote;
 
 import javax.servlet.http.HttpServletRequest;
 

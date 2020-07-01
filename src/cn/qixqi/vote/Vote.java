@@ -5,7 +5,7 @@
  * 4. vote_ip 表应该投票成功在更新
  * 5. 投票后更新 session，效率如何更高呢？
  */
-package club.qixqi.vote;
+package cn.qixqi.vote;
 
 import java.util.Locale;
 import java.util.Date;
