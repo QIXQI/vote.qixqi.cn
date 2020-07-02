@@ -15,6 +15,30 @@ public class Vote {
 	private String voteDesc5;
 	private int optionNumber;
 
+	/**
+	 * 添加投票 - 构造函数
+	 * @param voteName
+	 * @param voteType
+	 * @param voteEndTime
+	 * @param voteDesc1
+	 * @param voteDesc2
+	 * @param voteDesc3
+	 * @param voteDesc4
+	 * @param voteDesc5
+	 */
+	public Vote(String voteName, int voteType, Date voteEndTime, String voteDesc1, String voteDesc2, String voteDesc3,
+			String voteDesc4, String voteDesc5) {
+		super();
+		this.voteName = voteName;
+		this.voteType = voteType;
+		this.voteEndTime = voteEndTime;
+		this.voteDesc1 = voteDesc1;
+		this.voteDesc2 = voteDesc2;
+		this.voteDesc3 = voteDesc3;
+		this.voteDesc4 = voteDesc4;
+		this.voteDesc5 = voteDesc5;
+	}
+
 	public Vote(int voteId, String voteName, int voteType, Date voteTime, Date voteEndTime, String voteDesc1,
 			String voteDesc2, String voteDesc3, String voteDesc4, String voteDesc5, int optionNumber) {
 		super();
