@@ -46,8 +46,8 @@ create table if not exists `user`(
 	`user_password` varchar(255) not null,
 	`user_sex` varchar(10) default "未知",
 	`user_priority_id` int(5) default 0,
-	`user_join_time` timestamp default current_timestamp(),
-	`user_login_time` timestamp default current_timestamp(),
+	`user_join_time` timestamp default CURRENT_TIMESTAMP,
+	`user_login_time` timestamp default CURRENT_TIMESTAMP,
 	`user_email` varchar(255) unique,
 	`user_phone` varchar(15) unique,
 	`user_status_id` int(5) default 0,
@@ -97,7 +97,7 @@ create table if not exists `user_status`(
 -- 创建 visit_log 表
 create table if not exists `visit_log`(
 	`visit_ip` varchar(255) not null,
-	`visit_time` timestamp current_timestamp(),
+	`visit_time` timestamp default CURRENT_TIMESTAMP,
 	primary key(`visit_ip`, `visit_time`)
 )ENGINE=InnoDB default charset=utf8;
 
@@ -106,11 +106,49 @@ create table if not exists `visit_log`(
 create table if not exists `login_log`(
 	`user_id` int(11),
 	`login_ip` varchar(255),
-	`login_time` timestamp current_timestamp(),
+	`login_time` timestamp default CURRENT_TIMESTAMP,
 	primary key(`user_id`, `login_time`),
 	foreign key(`user_id`) references user(`user_id`)
-	on delete cascade on update cascade
+	on delete cascade on update cascade,
+	index index_id(`user_id`)
 )ENGINE=InnoDB default charset=utf8;
+
+-- 查询用户最近登录
+-- 下策
+select *
+from login_log
+where user_id = ?
+order by login_time desc
+limit 1
+-- 中策
+-- group by 有些问题
+select * 
+from(
+	select *
+	from login_log
+	where user_id = ?
+	order by login_time desc
+) as ll
+group by ll.user_id
+-- 上策
+-- group by 有问题
+select *, max(login_time) 
+from login_log
+where user_id = ?
+group by user_id
+-- 使用window function
+-- 如何找到对应每个 user_id最大login_time的login_ip
+select user_id, login_ip, max(login_time) over (partition by user_id) as user_last_login
+from login_log;
+-- 使用 window function
+select user_id, FIRST_VALUE(login_ip) over(partition by user_id order by login_time desc) as lastLoginIp, max(login_time) over (partition by user_id) as lastLoginTime
+from login_log
+where user_id = ?
+limit 1;
+-- 使用子查询
+select ll1.user_id, ll1.login_ip, ll1.login_time
+from login_log as ll1, (select max(login_time) lastTime from login_log where user_id = ?) as ll2
+where ll1.user_id = ? and ll1.login_time = ll2.lastTime;
 
 
 
@@ -120,7 +158,7 @@ create table if not exists `vote`(
 	`user_id` int(11),
 	`vote_name` varchar(255) not null,
 	`vote_type` int(5) default 0,		-- 投票类型：0普通投票/1图片/2音频/3视频
-	`vote_time` timestamp default current_timestamp(),
+	`vote_time` timestamp default CURRENT_TIMESTAMP,
 	`vote_end_time` timestamp not null, -- 投票结束时间
 	`vote_desc1` varchar(255),		-- 对应于选项，相当于字段名
 	`vote_desc2` varchar(255),

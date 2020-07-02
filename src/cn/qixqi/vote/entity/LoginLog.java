@@ -7,6 +7,23 @@ public class LoginLog {
 	private String loginIp;
 	private Date loginTime;
 	
+	/**
+	 * 插入数据 - 构造函数
+	 * @param userId
+	 * @param loginIp
+	 */
+	public LoginLog(int userId, String loginIp) {
+		super();
+		this.userId = userId;
+		this.loginIp = loginIp;
+	}
+
+	/**
+	 * 查询数据 - 构造函数
+	 * @param userId
+	 * @param loginIp
+	 * @param loginTime
+	 */
 	public LoginLog(int userId, String loginIp, Date loginTime) {
 		super();
 		this.userId = userId;
