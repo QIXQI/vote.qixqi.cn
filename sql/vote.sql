@@ -41,7 +41,7 @@ create table if not exists `vote_ip`(
 
 -- 创建 user 表
 create table if not exists `user`(
-	`user_id` int(11) primary key,
+	`user_id` int(11) primary key auto_increment,
 	`user_nickname` varchar(255) not null,
 	`user_password` varchar(255) not null,
 	`user_sex` varchar(10) default "未知",
@@ -59,6 +59,22 @@ create table if not exists `user`(
 	on delete cascade on update cascade,
 	index index_id(`user_id`)
 )ENGINE=InnoDB default charset=utf8;
+
+
+-- 查找用户
+select u.user_nickname, u.user_password, u.user_sex, up.user_priority, u.user_join_time, u.user_login_time, u.user_email, u.user_phone, us.user_status, u.user_avatar, u.user_birthday
+from user as u, user_priority as up, user_status as us
+where u.user_id = ? and u.user_priority_id = up.user_priority_id and u.user_status_id = us.user_status_id;
+
+-- 更新权限
+update user u, user_priority up
+set u.user_priority_id = up.user_priority_id
+where u.user_id = ? and  up.user_priority = ?
+
+-- 更新状态
+update user u, user_status us
+set u.user_status_id = us.user_status_id
+where u.user_id = ? and us.user_status = ?
 
 
 -- 创建 user_priority 表
@@ -97,6 +113,84 @@ create table if not exists `login_log`(
 )ENGINE=InnoDB default charset=utf8;
 
 
+
+-- 创建投票
+create table if not exists `vote`(
+	`vote_id` int(11) primary key auto_increment,
+	`user_id` int(11),
+	`vote_name` varchar(255) not null,
+	`vote_type` int(5) default 0,		-- 投票类型：0普通投票/1图片/2音频/3视频
+	`vote_time` timestamp default current_timestamp(),
+	`vote_end_time` timestamp not null, -- 投票结束时间
+	`vote_desc1` varchar(255),		-- 对应于选项，相当于字段名
+	`vote_desc2` varchar(255),
+	`vote_desc3` varchar(255),
+	`vote_desc4` varchar(255),
+	`vote_desc5` varchar(255),
+	`option_number` int(11) default 0,
+	foreign key(`user_id`) references user(`user_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
+
+
+-- 创建普通投票选项
+create table if not exists `normbal_option`(
+	`option_id` int(11) primary key auto_increment,
+	`vote_id` int(11),
+	`option_desc1` varchar(255) not null,
+	`option_desc2` varchar(255),
+	`option_desc3` varchar(255),
+	`option_desc4` varchar(255),
+	`option_desc5` varchar(255),
+	`option_poll` int(11),
+	foreign key(`vote_id`) references vote(`vote_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
+
+-- 创建带有图片的投票选项
+create table if not exists `img_option` (
+	`option_id` int(11) primary key auto_increment,
+	`vote_id` int(11),
+	`img_url` varchar(255) not null,
+	`option_desc1` varchar(255),
+	`option_desc2` varchar(255),
+	`option_desc3` varchar(255),
+	`option_desc4` varchar(255),
+	`option_desc5` varchar(255),
+	`option_poll` int(11),
+	foreign key(`vote_id`) references vote(`vote_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
+
+-- 创建带有音频的投票选项
+create table if not exists `audio_option`(
+	`option_id` int(11) primary key auto_increment,
+	`vote_id` int(11),
+	`audio_url` varchar(255) not null,
+	`option_desc1` varchar(255),
+	`option_desc2` varchar(255),
+	`option_desc3` varchar(255),
+	`option_desc4` varchar(255),
+	`option_desc5` varchar(255),
+	`option_poll` int(11),
+	foreign key(`vote_id`) references vote(`vote_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
+
+-- 创建带有视频的投票选项
+create table if not exists `video_option`(
+	`option_id` int(11) primary key auto_increment,
+	`vote_id` int(11),
+	`video_url` varchar(255) not null,
+	`option_desc1` varchar(255),
+	`option_desc2` varchar(255),
+	`option_desc3` varchar(255),
+	`option_desc4` varchar(255),
+	`option_desc5` varchar(255),
+	`option_poll` int(11),
+	foreign key(`vote_id`) references vote(`vote_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
 
 
 
