@@ -8,6 +8,17 @@ public class Option {
 	private String optionDesc4;
 	private String optionDesc5;
 	private int optionPoll;
+	
+	
+
+	public Option(String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4, String optionDesc5) {
+		super();
+		this.optionDesc1 = optionDesc1;
+		this.optoinDesc2 = optoinDesc2;
+		this.optionDesc3 = optionDesc3;
+		this.optionDesc4 = optionDesc4;
+		this.optionDesc5 = optionDesc5;
+	}
 
 	public Option(int optionId, String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4,
 			String optionDesc5, int optionPoll) {

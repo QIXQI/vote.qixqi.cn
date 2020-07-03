@@ -180,7 +180,7 @@ create table if not exists `normbal_option`(
 	`option_desc3` varchar(255),
 	`option_desc4` varchar(255),
 	`option_desc5` varchar(255),
-	`option_poll` int(11),
+	`option_poll` int(11) default 0,
 	foreign key(`vote_id`) references vote(`vote_id`)
 	on delete cascade on update cascade
 )ENGINE=InnoDB default charset=utf8;
@@ -195,7 +195,7 @@ create table if not exists `img_option` (
 	`option_desc3` varchar(255),
 	`option_desc4` varchar(255),
 	`option_desc5` varchar(255),
-	`option_poll` int(11),
+	`option_poll` int(11) default 0,
 	foreign key(`vote_id`) references vote(`vote_id`)
 	on delete cascade on update cascade
 )ENGINE=InnoDB default charset=utf8;
@@ -210,7 +210,7 @@ create table if not exists `audio_option`(
 	`option_desc3` varchar(255),
 	`option_desc4` varchar(255),
 	`option_desc5` varchar(255),
-	`option_poll` int(11),
+	`option_poll` int(11) default 0,
 	foreign key(`vote_id`) references vote(`vote_id`)
 	on delete cascade on update cascade
 )ENGINE=InnoDB default charset=utf8;
@@ -225,7 +225,7 @@ create table if not exists `video_option`(
 	`option_desc3` varchar(255),
 	`option_desc4` varchar(255),
 	`option_desc5` varchar(255),
-	`option_poll` int(11),
+	`option_poll` int(11) default 0,
 	foreign key(`vote_id`) references vote(`vote_id`)
 	on delete cascade on update cascade
 )ENGINE=InnoDB default charset=utf8;
