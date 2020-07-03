@@ -3,6 +3,13 @@ package cn.qixqi.vote.entity;
 public class ImgOption extends Option{
 	private String imgUrl;
 	
+	/**
+	 * 工厂方法创建
+	 */
+	public ImgOption() {
+		super();
+	}
+	
 	public ImgOption(String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4, String optionDesc5,
 			String imgUrl) {
 		super(optionDesc1, optoinDesc2, optionDesc3, optionDesc4, optionDesc5);

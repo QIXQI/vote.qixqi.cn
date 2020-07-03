@@ -3,6 +3,13 @@ package cn.qixqi.vote.entity;
 public class NormbalOption extends Option {
 
 	/**
+	 * 工厂方法创建
+	 */
+	public NormbalOption() {
+		super();
+	}
+	
+	/**
 	 * 查找选项 - 构造函数
 	 * @param optionId
 	 * @param optionDesc1
