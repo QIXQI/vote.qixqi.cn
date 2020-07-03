@@ -1,8 +1,10 @@
 package cn.qixqi.vote.proxy;
 
 import java.util.HashMap;
+import java.util.List;
 
 import cn.qixqi.vote.entity.User;
+import cn.qixqi.vote.entity.Vote;
 
 public class ProxyVisitor implements Visitor{
 	private int priority;
@@ -62,6 +64,44 @@ public class ProxyVisitor implements Visitor{
 			return "您还未登录";
 		}
 	}
+
+	@Override
+	public String publishVote(int userId, Vote vote) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.publishVote(userId, vote);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String deleteVote(int voteId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.deleteVote(voteId);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public Vote getVote(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getVote(voteId);
+	}
+
+	@Override
+	public List<Vote> getVotes(int userId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.getVotes(userId);
+		} else {
+			return null;
+		}
+	}
+	
+	
 	
 	
 	

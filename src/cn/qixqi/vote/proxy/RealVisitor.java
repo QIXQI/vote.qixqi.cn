@@ -1,10 +1,14 @@
 package cn.qixqi.vote.proxy;
 
 import java.util.HashMap;
+import java.util.List;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import cn.qixqi.vote.entity.User;
+import cn.qixqi.vote.entity.Vote;
 import cn.qixqi.vote.dao.impl.UserDaoImpl;
+import cn.qixqi.vote.dao.impl.VoteDaoImpl;
 
 public class RealVisitor implements Visitor{
 	
@@ -77,6 +81,46 @@ public class RealVisitor implements Visitor{
 			this.logger.error("用户 " + userId + "更新个人信息失败: " + result);
 		}
 		return result;
+	}
+
+	@Override
+	public String publishVote(int userId, Vote vote) {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		String result = vi.addVote(userId, vote);
+		if ("success".equals(result)) {
+			this.logger.info("用户 " + userId + "发布投票成功");
+		} else {
+			this.logger.error("用户 " + userId + "发布投票失败: " + result);
+		}
+		return result;
+	}
+
+	@Override
+	public String deleteVote(int voteId) {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		String result = vi.deleteVote(voteId);
+		if ("success".equals(result)) {
+			this.logger.info("删除投票 " + voteId + "成功");
+		} else {
+			this.logger.error("删除投票 " + voteId + "失败: " + result);
+		}
+		return result;
+	}
+
+	@Override
+	public Vote getVote(int voteId) {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		return vi.getVote(voteId);
+	}
+
+	@Override
+	public List<Vote> getVotes(int userId) {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		return vi.getVotes(userId);
 	}
 	
 	
