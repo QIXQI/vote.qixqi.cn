@@ -6,7 +6,7 @@ public class Vote {
 	private int voteId;
 	private String voteName;
 	private int voteType;
-	private Date voteTime;
+	private Date voteStartTime;
 	private Date voteEndTime;
 	private String voteDesc1;
 	private String voteDesc2;
@@ -39,13 +39,13 @@ public class Vote {
 		this.voteDesc5 = voteDesc5;
 	}
 
-	public Vote(int voteId, String voteName, int voteType, Date voteTime, Date voteEndTime, String voteDesc1,
+	public Vote(int voteId, String voteName, int voteType, Date voteStartTime, Date voteEndTime, String voteDesc1,
 			String voteDesc2, String voteDesc3, String voteDesc4, String voteDesc5, int optionNumber) {
 		super();
 		this.voteId = voteId;
 		this.voteName = voteName;
 		this.voteType = voteType;
-		this.voteTime = voteTime;
+		this.voteStartTime = voteStartTime;
 		this.voteEndTime = voteEndTime;
 		this.voteDesc1 = voteDesc1;
 		this.voteDesc2 = voteDesc2;
@@ -79,12 +79,12 @@ public class Vote {
 		this.voteType = voteType;
 	}
 
-	public Date getVoteTime() {
-		return voteTime;
+	public Date getVoteStartTime() {
+		return voteStartTime;
 	}
 
-	public void setVoteTime(Date voteTime) {
-		this.voteTime = voteTime;
+	public void setVoteStartTime(Date voteStartTime) {
+		this.voteStartTime = voteStartTime;
 	}
 
 	public Date getVoteEndTime() {
@@ -145,7 +145,7 @@ public class Vote {
 
 	@Override
 	public String toString() {
-		return "Vote [voteId=" + voteId + ", voteName=" + voteName + ", voteType=" + voteType + ", voteTime=" + voteTime
+		return "Vote [voteId=" + voteId + ", voteName=" + voteName + ", voteType=" + voteType + ", voteStartTime=" + voteStartTime
 				+ ", voteEndTime=" + voteEndTime + ", voteDesc1=" + voteDesc1 + ", voteDesc2=" + voteDesc2
 				+ ", voteDesc3=" + voteDesc3 + ", voteDesc4=" + voteDesc4 + ", voteDesc5=" + voteDesc5
 				+ ", optionNumber=" + optionNumber + "]";

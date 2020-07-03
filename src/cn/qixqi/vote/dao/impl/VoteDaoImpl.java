@@ -83,7 +83,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		Vote vote = null;
-		String sql = "select vote_name, vote_type, vote_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
+		String sql = "select vote_name, vote_type, vote_start_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
 				"from vote where vote_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);
@@ -92,7 +92,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 			if (rs.next()) {
 				String voteName = rs.getString(1);
 				int voteType = rs.getInt(2);
-				Date voteTime = rs.getTimestamp(3);
+				Date voteStartTime = rs.getTimestamp(3);
 				Date voteEndTime = rs.getTimestamp(4);
 				String voteDesc1 = rs.getString(5);
 				String voteDesc2 = rs.getString(6);
@@ -100,7 +100,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 				String voteDesc4 = rs.getString(8);
 				String voteDesc5 = rs.getString(9);
 				int optionNumber = rs.getInt(10);
-				vote = new Vote(voteId, voteName, voteType, voteTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber);
+				vote = new Vote(voteId, voteName, voteType, voteStartTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber);
 			} else {
 				this.logger.error("投票" + voteId + "不存在");
 			}
@@ -119,7 +119,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<Vote> voteList = new ArrayList<Vote>();
-		String sql = "select vote_id, vote_name, vote_type, vote_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
+		String sql = "select vote_id, vote_name, vote_type, vote_start_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
 				"from vote where user_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);
@@ -129,7 +129,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 				int voteId = rs.getInt(1);
 				String voteName = rs.getString(2);
 				int voteType = rs.getInt(3);
-				Date voteTime = rs.getTimestamp(4);
+				Date voteStartTime = rs.getTimestamp(4);
 				Date voteEndTime = rs.getTimestamp(5);
 				String voteDesc1 = rs.getString(6);
 				String voteDesc2 = rs.getString(7);
@@ -137,7 +137,7 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 				String voteDesc4 = rs.getString(9);
 				String voteDesc5 = rs.getString(10);
 				int optionNumber = rs.getInt(11);
-				voteList.add(new Vote(voteId, voteName, voteType, voteTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber));
+				voteList.add(new Vote(voteId, voteName, voteType, voteStartTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber));
 			}
 		} catch(SQLException se) {
 			voteList = null;

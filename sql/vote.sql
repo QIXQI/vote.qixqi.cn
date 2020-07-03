@@ -104,7 +104,7 @@ create table if not exists `visit_log`(
 
 -- 创建 login_log 表
 create table if not exists `login_log`(
-	`user_id` int(11),
+	`user_id` int(11) not null,
 	`login_ip` varchar(255),
 	`login_time` timestamp default CURRENT_TIMESTAMP,
 	primary key(`user_id`, `login_time`),
@@ -155,10 +155,10 @@ where ll1.user_id = ? and ll1.login_time = ll2.lastTime;
 -- 创建投票
 create table if not exists `vote`(
 	`vote_id` int(11) primary key auto_increment,
-	`user_id` int(11),
+	`user_id` int(11) not null,
 	`vote_name` varchar(255) not null,
 	`vote_type` int(5) default 0,		-- 投票类型：0普通投票/1图片/2音频/3视频
-	`vote_time` timestamp default CURRENT_TIMESTAMP,
+	`vote_start_time` timestamp default CURRENT_TIMESTAMP,
 	`vote_end_time` timestamp not null, -- 投票结束时间
 	`vote_desc1` varchar(255),		-- 对应于选项，相当于字段名
 	`vote_desc2` varchar(255),
@@ -171,10 +171,29 @@ create table if not exists `vote`(
 )ENGINE=InnoDB default charset=utf8;
 
 
+-- 创建投票日志
+create table if not exists `vote_log`(
+	`vote_id` int(11) not null,
+	`user_id` int(11),	-- 游客投票时为空
+	`vote_ip` varchar(255) not null,
+	`vote_time` timestamp default CURRENT_TIMESTAMP,
+	foreign key(`vote_id`) references vote(`vote_id`)
+	on delete cascade on update cascade,
+	foreign key(`user_id`) references user(`user_id`)
+	on delete cascade on update cascade
+)ENGINE=InnoDB default charset=utf8;
+
+-- 获取最新投票时间(vote_id, vote_ip)
+select max(vote_time)
+from vote_log
+where vote_id = ? and vote_ip = ?
+
+
+
 -- 创建普通投票选项
 create table if not exists `normbal_option`(
 	`option_id` int(11) primary key auto_increment,
-	`vote_id` int(11),
+	`vote_id` int(11) not null,
 	`option_desc1` varchar(255) not null,
 	`option_desc2` varchar(255),
 	`option_desc3` varchar(255),
@@ -188,7 +207,7 @@ create table if not exists `normbal_option`(
 -- 创建带有图片的投票选项
 create table if not exists `img_option` (
 	`option_id` int(11) primary key auto_increment,
-	`vote_id` int(11),
+	`vote_id` int(11) not null,
 	`img_url` varchar(255) not null,
 	`option_desc1` varchar(255),
 	`option_desc2` varchar(255),
@@ -203,7 +222,7 @@ create table if not exists `img_option` (
 -- 创建带有音频的投票选项
 create table if not exists `audio_option`(
 	`option_id` int(11) primary key auto_increment,
-	`vote_id` int(11),
+	`vote_id` int(11) not null,
 	`audio_url` varchar(255) not null,
 	`option_desc1` varchar(255),
 	`option_desc2` varchar(255),
@@ -218,7 +237,7 @@ create table if not exists `audio_option`(
 -- 创建带有视频的投票选项
 create table if not exists `video_option`(
 	`option_id` int(11) primary key auto_increment,
-	`vote_id` int(11),
+	`vote_id` int(11) not null,
 	`video_url` varchar(255) not null,
 	`option_desc1` varchar(255),
 	`option_desc2` varchar(255),
