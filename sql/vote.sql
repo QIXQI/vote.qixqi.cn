@@ -42,16 +42,16 @@ create table if not exists `vote_ip`(
 -- 创建 user 表
 create table if not exists `user`(
 	`user_id` int(11) primary key auto_increment,
-	`user_nickname` varchar(255) not null,
+	`user_name` varchar(255) not null unique,
 	`user_password` varchar(255) not null,
-	`user_sex` varchar(10) default "未知",
-	`user_priority_id` int(5) default 0,
+	`user_sex` varchar(10) default "unkown",
+	`user_priority_id` int(5) default 0,		-- 默认：注册用户
 	`user_join_time` timestamp default CURRENT_TIMESTAMP,
 	`user_login_time` timestamp default CURRENT_TIMESTAMP,
-	`user_email` varchar(255) unique,
-	`user_phone` varchar(15) unique,
-	`user_status_id` int(5) default 0,
-	`user_avatar` varchar(255) default "/vote/images/avatar/default.jpg",
+	`user_email` varchar(255) not null unique,
+	`user_phone` varchar(15) not null unique,
+	`user_status_id` int(5) default 0,			-- 默认：离线
+	`user_avatar` varchar(255) default "/vote/images/avatar/default.jpg",	-- 默认头像
 	`user_birthday` date default "1970-01-01",
 	foreign key(`user_priority_id`) references user_priority(`user_priority_id`)
 	on delete cascade on update cascade,
@@ -62,9 +62,10 @@ create table if not exists `user`(
 
 
 -- 查找用户
-select u.user_nickname, u.user_password, u.user_sex, up.user_priority, u.user_join_time, u.user_login_time, u.user_email, u.user_phone, us.user_status, u.user_avatar, u.user_birthday
-from user as u, user_priority as up, user_status as us
-where u.user_id = ? and u.user_priority_id = up.user_priority_id and u.user_status_id = us.user_status_id;
+select user_id, user_name, user_sex, user_priority_id, user_join_time, user_login_time, user_email, user_phone, user_status_id, user_avatar, user_birthday
+from user
+where (user_name = ? or user_email = ? or user_phone = ?) and user_password = ?
+
 
 -- 更新权限
 update user u, user_priority up

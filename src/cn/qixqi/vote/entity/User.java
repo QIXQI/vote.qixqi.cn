@@ -4,28 +4,28 @@ import java.util.Date;
 
 public class User {
 	private int userId;
-	private String userNickname;
+	private String userName;
 	private String userPassword;
 	private String userSex;
-	private String userPriority;
+	private int userPriority;
 	private Date userJoinTime;
 	private Date userLoginTime;
 	private String userEmail;
 	private String userPhone;
-	private String userStatus;
+	private int userStatus;
 	private String userAvatar;
 	private Date userBirthday;
 	
 	/**
 	 * 注册用户 - 构造函数
-	 * @param userNickname
+	 * @param userName
 	 * @param userPassword
 	 * @param userEmail
 	 * @param userPhone
 	 */
-	public User(String userNickname, String userPassword, String userEmail, String userPhone) {
+	public User(String userName, String userPassword, String userEmail, String userPhone) {
 		super();
-		this.userNickname = userNickname;
+		this.userName = userName;
 		this.userPassword = userPassword;
 		this.userEmail = userEmail;
 		this.userPhone = userPhone;
@@ -34,8 +34,7 @@ public class User {
 	/**
 	 * 获取用户信息 - 构造函数
 	 * @param userId
-	 * @param userNickname
-	 * @param userPassword
+	 * @param userName
 	 * @param userSex
 	 * @param userPriority
 	 * @param userJoinTime
@@ -46,13 +45,12 @@ public class User {
 	 * @param userAvatar
 	 * @param userBirthday
 	 */
-	public User(int userId, String userNickname, String userPassword, String userSex, String userPriority,
-			Date userJoinTime, Date userLoginTime, String userEmail, String userPhone, String userStatus,
+	public User(int userId, String userName, String userSex, int userPriority,
+			Date userJoinTime, Date userLoginTime, String userEmail, String userPhone, int userStatus,
 			String userAvatar, Date userBirthday) {
 		super();
 		this.userId = userId;
-		this.userNickname = userNickname;
-		this.userPassword = userPassword;
+		this.userName = userName;
 		this.userSex = userSex;
 		this.userPriority = userPriority;
 		this.userJoinTime = userJoinTime;
@@ -72,12 +70,12 @@ public class User {
 		this.userId = userId;
 	}
 
-	public String getUserNickname() {
-		return userNickname;
+	public String getUserName() {
+		return userName;
 	}
 
-	public void setUserNickname(String userNickname) {
-		this.userNickname = userNickname;
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public String getUserPassword() {
@@ -96,11 +94,11 @@ public class User {
 		this.userSex = userSex;
 	}
 
-	public String getUserPriority() {
+	public int getUserPriority() {
 		return userPriority;
 	}
 
-	public void setUserPriority(String userPriority) {
+	public void setUserPriority(int userPriority) {
 		this.userPriority = userPriority;
 	}
 
@@ -136,11 +134,11 @@ public class User {
 		this.userPhone = userPhone;
 	}
 
-	public String getUserStatus() {
+	public int getUserStatus() {
 		return userStatus;
 	}
 
-	public void setUserStatus(String userStatus) {
+	public void setUserStatus(int userStatus) {
 		this.userStatus = userStatus;
 	}
 
@@ -162,9 +160,9 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [userId=" + userId + ", userNickname=" + userNickname + ", userPassword=" + userPassword
-				+ ", userSex=" + userSex + ", userPriority=" + userPriority + ", userJoinTime=" + userJoinTime
-				+ ", userLoginTime=" + userLoginTime + ", userEmail=" + userEmail + ", userPhone=" + userPhone
-				+ ", userStatus=" + userStatus + ", userAvatar=" + userAvatar + ", userBirthday=" + userBirthday + "]";
+		return "User [userId=" + userId + ", userName=" + userName + ", userPassword=" + userPassword + ", userSex="
+				+ userSex + ", userPriority=" + userPriority + ", userJoinTime=" + userJoinTime + ", userLoginTime="
+				+ userLoginTime + ", userEmail=" + userEmail + ", userPhone=" + userPhone + ", userStatus=" + userStatus
+				+ ", userAvatar=" + userAvatar + ", userBirthday=" + userBirthday + "]";
 	}
 }

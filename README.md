@@ -19,6 +19,12 @@ javac -Djava.ext.dirs=lib/ src/club/qixqi/vote/*.java
 #### /config/springmvc.xml
 视图解析器 InternalResourceViewResolver 为什么能访问到 /WEB-INF/jsp/下的文件，还是只是浏览器不能通过 url 访问 /WEB-INF/jsp/ 下的文件
 
+#### 登录
+登录使用：用户名/邮箱/手机号 + 密码
+	* 用户名：不能包含 @, 不能是手机号
+	* 邮箱：正则表达式
+	* 手机号：check
+
 
 # docker 端口映射
 1. nginx 
