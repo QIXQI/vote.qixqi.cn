@@ -2,6 +2,12 @@ package cn.qixqi.vote.entity;
 
 public class VideoOption extends Option{
 	private String videoUrl;
+	
+	public VideoOption(String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4,
+			String optionDesc5, String videoUrl) {
+		super(optionDesc1, optoinDesc2, optionDesc3, optionDesc4, optionDesc5);
+		this.videoUrl = videoUrl;
+	}
 
 	public VideoOption(int optionId, String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4,
 			String optionDesc5, int optionPoll, String videoUrl) {
