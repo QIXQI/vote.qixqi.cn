@@ -3,7 +3,11 @@ package cn.qixqi.vote.proxy;
 import java.util.HashMap;
 import java.util.List;
 
+import cn.qixqi.vote.entity.AudioOption;
+import cn.qixqi.vote.entity.ImgOption;
+import cn.qixqi.vote.entity.NormbalOption;
 import cn.qixqi.vote.entity.User;
+import cn.qixqi.vote.entity.VideoOption;
 import cn.qixqi.vote.entity.Vote;
 
 public class ProxyVisitor implements Visitor{
@@ -100,13 +104,118 @@ public class ProxyVisitor implements Visitor{
 			return null;
 		}
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public String addOption(int voteId, NormbalOption normbalOption) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.addOption(voteId, normbalOption);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String addOption(int voteId, ImgOption imgOption) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.addOption(voteId, imgOption);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String addOption(int voteId, AudioOption audioOption) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.addOption(voteId, audioOption);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String addOption(int voteId, VideoOption videoOption) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.addOption(voteId, videoOption);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public NormbalOption getNormbalOption(int optionId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getNormbalOption(optionId);
+	}
+
+	@Override
+	public ImgOption getImgOption(int optionId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getImgOption(optionId);
+	}
+
+	@Override
+	public AudioOption getAudioOption(int optionId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getAudioOption(optionId);
+	}
+
+	@Override
+	public VideoOption getVideoOption(int optionId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getVideoOption(optionId);
+	}
+
+	@Override
+	public List<NormbalOption> getNormbalOptions(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getNormbalOptions(voteId);
+	}
+
+	@Override
+	public List<ImgOption> getImgOptions(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getImgOptions(voteId);
+	}
+
+	@Override
+	public List<AudioOption> getAudioOptions(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getAudioOptions(voteId);
+	}
+
+	@Override
+	public List<VideoOption> getVideoOptions(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getVideoOptions(voteId);
+	}
+
+	@Override
+	public String addPoll(int optionId) {
+		// TODO Auto-generated method stub
+		return realVisitor.addPoll(optionId);
+	}
+
+	@Override
+	public String deleteOption(int optionId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.deleteOption(optionId);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String updateOption(int optionId, HashMap<String, Object> map) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.updateOption(optionId, map);
+		} else {
+			return "您还未登录";
+		}
+	}
 }
