@@ -1,12 +1,9 @@
 package cn.qixqi.vote.entity;
 
 public class NormbalOption extends Option {
-
-	/**
-	 * 工厂方法创建
-	 */
+	
 	public NormbalOption() {
-		super();
+		
 	}
 	
 	/**

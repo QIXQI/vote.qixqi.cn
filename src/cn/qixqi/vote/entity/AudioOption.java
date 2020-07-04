@@ -3,11 +3,8 @@ package cn.qixqi.vote.entity;
 public class AudioOption extends Option{
 	private String audioUrl;
 	
-	/**
-	 * 工厂方法创建
-	 */
 	public AudioOption() {
-		super();
+		
 	}
 	
 	public AudioOption(String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4,

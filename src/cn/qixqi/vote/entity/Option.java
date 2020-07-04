@@ -8,10 +8,11 @@ public class Option {
 	private String optionDesc4;
 	private String optionDesc5;
 	private int optionPoll;
-
+	
 	public Option() {
 		
 	}
+
 	
 	public Option(String optionDesc1, String optoinDesc2, String optionDesc3, String optionDesc4, String optionDesc5) {
 		super();
