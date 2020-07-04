@@ -40,9 +40,10 @@ public class RealVisitor implements Visitor{
 			// 更新用户状态
 			HashMap<String, Object> map = new HashMap<String, Object>();
 			map.put("user_status_id", Status.ONLINE);
+			map.put("user_login_time", new Date());
 			String result = ui.updateUser(user.getUserId(), map);
 			if ("success".equals(result)) {
-				user.setUserStatus(Status.ONLINE);
+				user = ui.getUser(key, password);
 				this.logger.info("用户 " + user.getUserId() + "更新为在线状态成功");
 			} else {
 				this.logger.error("用户 " + user.getUserId() + "更新为在线状态失败: " + result);

@@ -94,6 +94,13 @@ create table if not exists `user_status`(
 )ENGINE=InnoDB default charset=utf8;
 
 
+insert into user_priority(user_priority_id, user_priority) values (-1, "VISITOR");
+insert into user_priority(user_priority_id, user_priority) values (0, "USER");
+insert into user_priority(user_priority_id, user_priority) values (1, "ADMINISTRATOR");
+
+insert into user_status(user_status_id, user_status) values (0, "OFFLINE");
+insert into user_status(user_status_id, user_status) values (1, "ONLINE");
+
 
 -- 创建 visit_log 表
 create table if not exists `visit_log`(
