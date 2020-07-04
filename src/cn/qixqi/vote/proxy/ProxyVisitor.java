@@ -1,14 +1,17 @@
 package cn.qixqi.vote.proxy;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import cn.qixqi.vote.entity.AudioOption;
 import cn.qixqi.vote.entity.ImgOption;
+import cn.qixqi.vote.entity.LoginLog;
 import cn.qixqi.vote.entity.NormbalOption;
 import cn.qixqi.vote.entity.User;
 import cn.qixqi.vote.entity.VideoOption;
 import cn.qixqi.vote.entity.Vote;
+import cn.qixqi.vote.entity.VoteLog;
 
 public class ProxyVisitor implements Visitor{
 	private int priority;
@@ -216,6 +219,64 @@ public class ProxyVisitor implements Visitor{
 			return realVisitor.updateOption(optionId, map);
 		} else {
 			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String addLoginLog(LoginLog log) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.addLoginLog(log);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public LoginLog lastLoginLog(int userId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.lastLoginLog(userId);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public List<LoginLog> getLoginLogs(int userId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.getLoginLogs(userId);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
+	public String addVoteLog(VoteLog voteLog) {
+		// TODO Auto-generated method stub
+		return realVisitor.addVoteLog(voteLog);
+	}
+
+	@Override
+	public Date lastVoteTime(int voteId, String voteIp) {
+		// TODO Auto-generated method stub
+		return realVisitor.lastVoteTime(voteId, voteIp);
+	}
+
+	@Override
+	public List<VoteLog> getVoteLogsByVote(int voteId) {
+		// TODO Auto-generated method stub
+		return realVisitor.getVoteLogsByVote(voteId);
+	}
+
+	@Override
+	public List<VoteLog> getVoteLogsByUser(int userId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.getVoteLogsByUser(userId);
+		} else {
+			return null;
 		}
 	}
 }

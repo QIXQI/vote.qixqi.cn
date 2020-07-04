@@ -1,5 +1,6 @@
 package cn.qixqi.vote.proxy;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,12 +9,16 @@ import org.apache.logging.log4j.Logger;
 
 import cn.qixqi.vote.entity.AudioOption;
 import cn.qixqi.vote.entity.ImgOption;
+import cn.qixqi.vote.entity.LoginLog;
 import cn.qixqi.vote.entity.NormbalOption;
 import cn.qixqi.vote.entity.User;
 import cn.qixqi.vote.entity.VideoOption;
 import cn.qixqi.vote.entity.Vote;
+import cn.qixqi.vote.entity.VoteLog;
 import cn.qixqi.vote.dao.impl.UserDaoImpl;
 import cn.qixqi.vote.dao.impl.VoteDaoImpl;
+import cn.qixqi.vote.dao.impl.LoginLogDaoImpl;
+import cn.qixqi.vote.dao.impl.VoteLogDaoImpl;
 import cn.qixqi.vote.factory.*;
 
 public class RealVisitor implements Visitor{
@@ -232,6 +237,55 @@ public class RealVisitor implements Visitor{
 		// TODO Auto-generated method stub
 		OptionDaoFactory factory = new NormbalOptionDaoFactory();
 		return factory.updateOption(optionId, map);
+	}
+
+	@Override
+	public String addLoginLog(LoginLog log) {
+		// TODO Auto-generated method stub
+		LoginLogDaoImpl li = new LoginLogDaoImpl();
+		return li.addLoginLog(log);
+	}
+
+	@Override
+	public LoginLog lastLoginLog(int userId) {
+		// TODO Auto-generated method stub
+		LoginLogDaoImpl li = new LoginLogDaoImpl();
+		return li.lastLoginLog(userId);
+	}
+
+	@Override
+	public List<LoginLog> getLoginLogs(int userId) {
+		// TODO Auto-generated method stub
+		LoginLogDaoImpl li = new LoginLogDaoImpl();
+		return li.getLoginLogs(userId);
+	}
+
+	@Override
+	public String addVoteLog(VoteLog voteLog) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.addVoteLog(voteLog);
+	}
+
+	@Override
+	public Date lastVoteTime(int voteId, String voteIp) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.lastVoteTime(voteId, voteIp);
+	}
+
+	@Override
+	public List<VoteLog> getVoteLogsByVote(int voteId) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.getVoteLogsByVote(voteId);
+	}
+
+	@Override
+	public List<VoteLog> getVoteLogsByUser(int userId) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.getVoteLogsByUser(userId);
 	}
 	
 	
