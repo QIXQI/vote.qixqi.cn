@@ -12,27 +12,29 @@ import org.apache.logging.log4j.Logger;
 import cn.qixqi.vote.dao.BaseDao;
 import cn.qixqi.vote.dao.VideoOptionDao;
 import cn.qixqi.vote.entity.VideoOption;
+import cn.qixqi.vote.entity.Option;
 
 public class VideoOptionDaoImpl extends BaseDao implements VideoOptionDao{
 
 	private Logger logger = LogManager.getLogger(VideoOptionDaoImpl.class.getName());
 	
 	@Override
-	public String addOption(int voteId, VideoOption option) {
+	public String addOption(int voteId, Option option) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		String result = "success";
 		String sql = "insert into video_option(vote_id, video_url, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5) values (?, ?, ?, ?, ?, ?, ?)";
 		try {
+			VideoOption videoOption = (VideoOption) option;
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, voteId);
-			pst.setString(2, option.getVideoUrl());
-			pst.setString(3, option.getOptionDesc1());
-			pst.setString(4, option.getOptoinDesc2());
-			pst.setString(5, option.getOptionDesc3());
-			pst.setString(6, option.getOptionDesc4());
-			pst.setString(7, option.getOptionDesc5());
+			pst.setString(2, videoOption.getVideoUrl());
+			pst.setString(3, videoOption.getOptionDesc1());
+			pst.setString(4, videoOption.getOptoinDesc2());
+			pst.setString(5, videoOption.getOptionDesc3());
+			pst.setString(6, videoOption.getOptionDesc4());
+			pst.setString(7, videoOption.getOptionDesc5());
 			pst.executeUpdate();
 		} catch(SQLException se) {
 			result = se.getMessage();
@@ -74,12 +76,12 @@ public class VideoOptionDaoImpl extends BaseDao implements VideoOptionDao{
 	}
 
 	@Override
-	public VideoOption getOption(int optionId) {
+	public Option getOption(int optionId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		VideoOption option = null;
+		Option option = null;
 		String sql = "select video_url, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5, option_poll from video_option where option_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);
@@ -106,12 +108,12 @@ public class VideoOptionDaoImpl extends BaseDao implements VideoOptionDao{
 	}
 
 	@Override
-	public List<VideoOption> getOptions(int voteId) {
+	public List<Option> getOptions(int voteId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		List<VideoOption> optionList = new ArrayList<VideoOption>();
+		List<Option> optionList = new ArrayList<Option>();
 		String sql = "select option_id, video_url, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5, option_poll from video_option where vote_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);

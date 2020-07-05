@@ -1,6 +1,7 @@
 package cn.qixqi.vote.factory;
 
 import java.util.List;
+import cn.qixqi.vote.entity.Option;
 import cn.qixqi.vote.entity.ImgOption;
 import cn.qixqi.vote.dao.OptionDao;
 import cn.qixqi.vote.dao.ImgOptionDao;
@@ -23,18 +24,21 @@ public class ImgOptionDaoFactory extends OptionDaoFactory{
 	}
 	
 	// 添加选项
-	public String addOption(int voteId, ImgOption imgOption) {
-		return this.imgOptionDao.addOption(voteId, imgOption);
+	@Override
+	public String addOption(int voteId, Option option) {
+		return this.imgOptionDao.addOption(voteId, option);
 	}
 	
 	// 获取选项
-	public ImgOption getOption(int optionId) {
+	@Override
+	public Option getOption(int optionId) {
 		return this.imgOptionDao.getOption(optionId);
 	}
 	
 	// 获取选项列表
-	public List<ImgOption> getOptions(int voteId){
-		return this.getOptions(voteId);
+	@Override
+	public List<Option> getOptions(int voteId){
+		return this.imgOptionDao.getOptions(voteId);
 	}
 
 }

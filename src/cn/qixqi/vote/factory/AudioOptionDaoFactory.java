@@ -1,6 +1,7 @@
 package cn.qixqi.vote.factory;
 
 import java.util.List;
+import cn.qixqi.vote.entity.Option;
 import cn.qixqi.vote.entity.AudioOption;
 import cn.qixqi.vote.dao.OptionDao;
 import cn.qixqi.vote.dao.AudioOptionDao;
@@ -23,17 +24,20 @@ public class AudioOptionDaoFactory extends OptionDaoFactory{
 	}
 	
 	// 添加选项
-	public String addOption(int voteId, AudioOption audioOption) {
-		return this.audioOptionDao.addOption(voteId, audioOption);
+	@Override
+	public String addOption(int voteId, Option option) {
+		return this.audioOptionDao.addOption(voteId, option);
 	}
 	
 	// 获取选项
-	public AudioOption getOption(int optionId) {
+	@Override
+	public Option getOption(int optionId) {
 		return this.audioOptionDao.getOption(optionId);
 	}
 	
 	// 获取选项列表
-	public List<AudioOption> getOptions(int voteId){
+	@Override
+	public List<Option> getOptions(int voteId){
 		return this.audioOptionDao.getOptions(voteId);
 	}
 

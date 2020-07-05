@@ -7,12 +7,8 @@ import java.util.List;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import cn.qixqi.vote.entity.AudioOption;
-import cn.qixqi.vote.entity.ImgOption;
 import cn.qixqi.vote.entity.LoginLog;
-import cn.qixqi.vote.entity.NormbalOption;
 import cn.qixqi.vote.entity.User;
-import cn.qixqi.vote.entity.VideoOption;
 import cn.qixqi.vote.entity.Vote;
 import cn.qixqi.vote.entity.VoteLog;
 import cn.qixqi.vote.dao.impl.UserDaoImpl;
@@ -20,6 +16,8 @@ import cn.qixqi.vote.dao.impl.VoteDaoImpl;
 import cn.qixqi.vote.dao.impl.LoginLogDaoImpl;
 import cn.qixqi.vote.dao.impl.VoteLogDaoImpl;
 import cn.qixqi.vote.factory.*;
+import cn.qixqi.vote.util.OptionDaoFactoryHelper;
+import cn.qixqi.vote.entity.Option;
 
 public class RealVisitor implements Visitor{
 	
@@ -162,107 +160,72 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
-	public String addOption(int voteId, NormbalOption normbalOption) {
+	public String addOption(int optionType, int voteId, Option option) {
 		// TODO Auto-generated method stub
-		NormbalOptionDaoFactory factory = new NormbalOptionDaoFactory();
-		return factory.addOption(voteId, normbalOption);
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			String result = "选项类型: " + optionType + "不存在";
+			this.logger.error(result);
+			return result;
+		}
+		return factory.addOption(voteId, option);
 	}
 
 	@Override
-	public String addOption(int voteId, ImgOption imgOption) {
+	public Option getOption(int optionType, int optionId) {
 		// TODO Auto-generated method stub
-		ImgOptionDaoFactory factory = new ImgOptionDaoFactory();
-		return factory.addOption(voteId, imgOption);
-	}
-
-	@Override
-	public String addOption(int voteId, AudioOption audioOption) {
-		// TODO Auto-generated method stub
-		AudioOptionDaoFactory factory = new AudioOptionDaoFactory();
-		return factory.addOption(voteId, audioOption);
-	}
-
-	@Override
-	public String addOption(int voteId, VideoOption videoOption) {
-		// TODO Auto-generated method stub
-		VideoOptionDaoFactory factory = new VideoOptionDaoFactory();
-		return factory.addOption(voteId, videoOption);
-	}
-
-	@Override
-	public NormbalOption getNormbalOption(int optionId) {
-		// TODO Auto-generated method stub
-		NormbalOptionDaoFactory factory = new NormbalOptionDaoFactory();
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			this.logger.error("选项类型: " + optionType + "不存在");
+			return null;
+		}
 		return factory.getOption(optionId);
 	}
 
 	@Override
-	public ImgOption getImgOption(int optionId) {
+	public List<Option> getOptions(int optionType, int voteId) {
 		// TODO Auto-generated method stub
-		ImgOptionDaoFactory factory = new ImgOptionDaoFactory();
-		return factory.getOption(optionId);
-	}
-
-	@Override
-	public AudioOption getAudioOption(int optionId) {
-		// TODO Auto-generated method stub
-		AudioOptionDaoFactory factory = new AudioOptionDaoFactory();
-		return factory.getOption(optionId);
-	}
-
-	@Override
-	public VideoOption getVideoOption(int optionId) {
-		// TODO Auto-generated method stub
-		VideoOptionDaoFactory factory = new VideoOptionDaoFactory();
-		return factory.getOption(optionId);
-	}
-
-	@Override
-	public List<NormbalOption> getNormbalOptions(int voteId) {
-		// TODO Auto-generated method stub
-		NormbalOptionDaoFactory factory = new NormbalOptionDaoFactory();
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			this.logger.error("选项类型: " + optionType + "不存在");
+			return null;
+		}
 		return factory.getOptions(voteId);
 	}
 
 	@Override
-	public List<ImgOption> getImgOptions(int voteId) {
+	public String addPoll(int optionType, int optionId) {
 		// TODO Auto-generated method stub
-		ImgOptionDaoFactory factory = new ImgOptionDaoFactory();
-		return factory.getOptions(voteId);
-	}
-
-	@Override
-	public List<AudioOption> getAudioOptions(int voteId) {
-		// TODO Auto-generated method stub
-		AudioOptionDaoFactory factory = new AudioOptionDaoFactory();
-		return factory.getOptions(voteId);
-	}
-
-	@Override
-	public List<VideoOption> getVideoOptions(int voteId) {
-		// TODO Auto-generated method stub
-		VideoOptionDaoFactory factory = new VideoOptionDaoFactory();
-		return factory.getOptions(voteId);
-	}
-
-	@Override
-	public String addPoll(int optionId) {
-		// TODO Auto-generated method stub
-		OptionDaoFactory factory = new NormbalOptionDaoFactory();
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			String result = "选项类型: " + optionType + "不存在";
+			this.logger.error(result);
+			return result;
+		}
 		return factory.addPoll(optionId);
 	}
 
 	@Override
-	public String deleteOption(int optionId) {
+	public String deleteOption(int optionType, int optionId) {
 		// TODO Auto-generated method stub
-		OptionDaoFactory factory = new NormbalOptionDaoFactory();
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			String result = "选项类型: " + optionType + "不存在";
+			this.logger.error(result);
+			return result;
+		}
 		return factory.deleteOption(optionId);
 	}
 
 	@Override
-	public String updateOption(int optionId, HashMap<String, Object> map) {
+	public String updateOption(int optionType, int optionId, HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
-		OptionDaoFactory factory = new NormbalOptionDaoFactory();
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			String result = "选项类型: " + optionType + "不存在";
+			this.logger.error(result);
+			return result;
+		}
 		return factory.updateOption(optionId, map);
 	}
 

@@ -7,11 +7,8 @@ import java.util.HashMap;
 import cn.qixqi.vote.entity.User;
 import cn.qixqi.vote.entity.Vote;
 import cn.qixqi.vote.entity.VoteLog;
-import cn.qixqi.vote.entity.NormbalOption;
-import cn.qixqi.vote.entity.ImgOption;
+import cn.qixqi.vote.entity.Option;
 import cn.qixqi.vote.entity.LoginLog;
-import cn.qixqi.vote.entity.AudioOption;
-import cn.qixqi.vote.entity.VideoOption;
 
 public interface Visitor {
 	// ****************************
@@ -54,31 +51,22 @@ public interface Visitor {
 	// ***********************
 	// 投票选项
 	// 投票添加选项
-	public String addOption(int voteId, NormbalOption normbalOption);
-	public String addOption(int voteId, ImgOption imgOption);
-	public String addOption(int voteId, AudioOption audioOption);
-	public String addOption(int voteId, VideoOption videoOption);
+	public String addOption(int optionType, int voteId, Option option);
 	
 	// 获取选项
-	public NormbalOption getNormbalOption(int optionId);
-	public ImgOption getImgOption(int optionId);
-	public AudioOption getAudioOption(int optionId);
-	public VideoOption getVideoOption(int optionId);
+	public Option getOption(int optionType, int optionId);
 	
 	// 获取选项列表
-	public List<NormbalOption> getNormbalOptions(int voteId);
-	public List<ImgOption> getImgOptions(int voteId);
-	public List<AudioOption> getAudioOptions(int voteId);
-	public List<VideoOption> getVideoOptions(int voteId);
+	public List<Option> getOptions(int optionType, int voteId);
 	
 	// 投票
-	public String addPoll(int optionId);
+	public String addPoll(int optionType, int optionId);
 	
 	// 删除选项
-	public String deleteOption(int optionId);
+	public String deleteOption(int optionType, int optionId);
 	
 	// 更新选项
-	public String updateOption(int optionId, HashMap<String, Object> map);
+	public String updateOption(int optionType, int optionId, HashMap<String, Object> map);
 	
 	// *******************************************
 	// 登录日志

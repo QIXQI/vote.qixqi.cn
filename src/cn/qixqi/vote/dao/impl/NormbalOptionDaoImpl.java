@@ -12,26 +12,28 @@ import org.apache.logging.log4j.Logger;
 import cn.qixqi.vote.dao.BaseDao;
 import cn.qixqi.vote.dao.NormbalOptionDao;
 import cn.qixqi.vote.entity.NormbalOption;
+import cn.qixqi.vote.entity.Option;
 
 public class NormbalOptionDaoImpl extends BaseDao implements NormbalOptionDao {
 	
 	private Logger logger = LogManager.getLogger(NormbalOptionDaoImpl.class.getName());
 	
 	@Override
-	public String addOption(int voteId, NormbalOption option) {
+	public String addOption(int voteId, Option option) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		String result = "success";
 		String sql = "insert into normbal_option(vote_id, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5) values (?, ?, ?, ?, ?, ?)";
 		try {
+			NormbalOption normbalOption = (NormbalOption) option;
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, voteId);
-			pst.setString(2, option.getOptionDesc1());
-			pst.setString(3, option.getOptoinDesc2());
-			pst.setString(4, option.getOptionDesc3());
-			pst.setString(5, option.getOptionDesc4());
-			pst.setString(6, option.getOptionDesc5());
+			pst.setString(2, normbalOption.getOptionDesc1());
+			pst.setString(3, normbalOption.getOptoinDesc2());
+			pst.setString(4, normbalOption.getOptionDesc3());
+			pst.setString(5, normbalOption.getOptionDesc4());
+			pst.setString(6, normbalOption.getOptionDesc5());
 			pst.executeUpdate();
 		} catch(SQLException se) {
 			result = se.getMessage();
@@ -73,12 +75,12 @@ public class NormbalOptionDaoImpl extends BaseDao implements NormbalOptionDao {
 	}
 
 	@Override
-	public NormbalOption getOption(int optionId) {
+	public Option getOption(int optionId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		NormbalOption option = null;
+		Option option = null;
 		String sql = "select option_desc1, option_desc2, option_desc3, option_desc4, option_desc5, option_poll from normbal_option where option_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);
@@ -104,12 +106,12 @@ public class NormbalOptionDaoImpl extends BaseDao implements NormbalOptionDao {
 	}
 
 	@Override
-	public List<NormbalOption> getOptions(int voteId) {
+	public List<Option> getOptions(int voteId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		ResultSet rs = null;
-		List<NormbalOption> optionList = new ArrayList<NormbalOption>();
+		List<Option> optionList = new ArrayList<Option>();
 		String sql = "select option_id, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5, option_poll from normbal_option where vote_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);

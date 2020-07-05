@@ -1,5 +1,6 @@
 package cn.qixqi.vote.factory;
 
+import cn.qixqi.vote.entity.Option;
 import cn.qixqi.vote.entity.NormbalOption;
 import cn.qixqi.vote.dao.OptionDao;
 
@@ -24,17 +25,20 @@ public class NormbalOptionDaoFactory extends OptionDaoFactory{
 	}
 	
 	// 添加选项
-	public String addOption(int voteId, NormbalOption normbalOption) {
-		return this.normbalOptionDao.addOption(voteId, normbalOption);
+	@Override
+	public String addOption(int voteId, Option option) {
+		return this.normbalOptionDao.addOption(voteId, option);
 	}
 	
 	// 获取选项
-	public NormbalOption getOption(int optionId) {
+	@Override
+	public Option getOption(int optionId) {
 		return this.normbalOptionDao.getOption(optionId);
 	}
 
 	// 获取选项列表
-	public List<NormbalOption> getOptions(int voteId){
-		return this.getOptions(voteId);
+	@Override
+	public List<Option> getOptions(int voteId){
+		return this.normbalOptionDao.getOptions(voteId);
 	}
 }
