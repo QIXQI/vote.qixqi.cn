@@ -43,7 +43,7 @@ public class RealVisitor implements Visitor{
 			map.put("user_login_time", new Date());
 			String result = ui.updateUser(user.getUserId(), map);
 			if ("success".equals(result)) {
-				user = ui.getUser(key, password);
+				user = ui.getUser(user.getUserId());
 				this.logger.info("用户 " + user.getUserId() + "更新为在线状态成功");
 			} else {
 				this.logger.error("用户 " + user.getUserId() + "更新为在线状态失败: " + result);
@@ -83,6 +83,19 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
+	public String getUserAvatar(int userId) {
+		// TODO Auto-generated method stub
+		UserDaoImpl ui = new UserDaoImpl();
+		String result = ui.getUserAvatar(userId);
+		if (result != null) {
+			this.logger.info("用户 " + userId + "获取头像成功: " + result);
+		} else {
+			this.logger.error("用户 " + userId + "获取头像失败");
+		}
+		return result;
+	}
+
+	@Override
 	public String updateUserInfo(int userId, HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		UserDaoImpl ui = new UserDaoImpl();
@@ -91,6 +104,19 @@ public class RealVisitor implements Visitor{
 			this.logger.info("用户 " + userId + "更新个人信息成功");
 		} else {
 			this.logger.error("用户 " + userId + "更新个人信息失败: " + result);
+		}
+		return result;
+	}
+
+	@Override
+	public String resetPass(int userId, String userPassword) {
+		// TODO Auto-generated method stub
+		UserDaoImpl ui = new UserDaoImpl();
+		String result = ui.resetPass(userId, userPassword);
+		if ("success".equals(result)) {
+			this.logger.info("用户 " + userId + "更新密码 " + userPassword + "成功");
+		} else {
+			this.logger.error("用户 " + userId + "更新密码 " + userPassword + "失败: " + result);
 		}
 		return result;
 	}

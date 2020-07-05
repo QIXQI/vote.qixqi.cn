@@ -63,10 +63,30 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
+	public String getUserAvatar(int userId) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.getUserAvatar(userId);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public String updateUserInfo(int userId, HashMap<String, Object> map) {
 		// TODO Auto-generated method stub
 		if (priority != Priorities.VISITOR) {
 			return realVisitor.updateUserInfo(userId, map);
+		} else {
+			return "您还未登录";
+		}
+	}
+
+	@Override
+	public String resetPass(int userId, String userPassword) {
+		// TODO Auto-generated method stub
+		if (priority != Priorities.VISITOR) {
+			return realVisitor.resetPass(userId, userPassword);
 		} else {
 			return "您还未登录";
 		}

@@ -28,8 +28,14 @@ public interface Visitor {
 	// 更新头像
 	public String updateAvatar(int userId, String userAvatar);
 	
+	// 获取头像
+	public String getUserAvatar(int userId);
+	
 	// 更新用户个人信息
 	public String updateUserInfo(int userId, HashMap<String, Object> map);
+	
+	// 更新密码
+	public String resetPass(int userId, String userPassword);
 	
 	// *****************************
 	// 投票
