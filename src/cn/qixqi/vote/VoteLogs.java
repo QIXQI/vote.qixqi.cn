@@ -20,18 +20,34 @@ public class VoteLogs {
 	
 	@RequestMapping("getLastVoteTime.do")
 	public String getLastVoteTime(HttpServletRequest request) {
+		if (request.getParameter("voteId") == null || request.getParameter("userId") == null) {
+			this.logger.error("voteId 或 userId 为空");
+			return null;
+		}
+		int voteId = Integer.parseInt(request.getParameter("voteId"));
+		int userId = Integer.parseInt(request.getParameter("userId"));
+		Visitor visitor = new ProxyVisitor(Priorities.USER);
+		Date lastTime = visitor.lastVoteTime(voteId, userId);
+		
+		System.out.println(lastTime.toString());
+		return null;
+	}
+	
+	@RequestMapping("getLastVoteTimeByTP.do")
+	public String getLastVoteTimeByTP(HttpServletRequest request) {
 		if (request.getParameter("voteId") == null) {
 			this.logger.error("voteId 为空");
 			return null;
 		}
 		int voteId = Integer.parseInt(request.getParameter("voteId"));
-		String voteIp = request.getParameter("voteIp");
-		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
-		Date lastTime = visitor.lastVoteTime(voteId, voteIp);
+		String thirdPartyId = request.getParameter("thirdPartyId");
+		Visitor visitor = new ProxyVisitor(Priorities.THIRD_PARTY_USER);
+		Date lastTime = visitor.lastVoteTime(voteId, thirdPartyId);
 		
 		System.out.println(lastTime.toString());
 		return null;
 	}
+	
 	
 	@RequestMapping("getVoteLogsByVote.do")
 	public String getVoteLogsByVote(HttpServletRequest request) {
@@ -56,6 +72,16 @@ public class VoteLogs {
 		int userId = Integer.parseInt(request.getParameter("userId"));
 		Visitor visitor = new ProxyVisitor(Priorities.USER);
 		List<VoteLog> voteLogList = visitor.getVoteLogsByUser(userId);
+		
+		System.out.println(voteLogList.toString());
+		return null;
+	}
+	
+	@RequestMapping("getVoteLogsByTP.do")
+	public String getVoteLogsByTP(HttpServletRequest request) {
+		String thirdPartyId = request.getParameter("thirdPartyId");
+		Visitor visitor = new ProxyVisitor(Priorities.THIRD_PARTY_USER);
+		List<VoteLog> voteLogList = visitor.getVoteLogsByThirdParty(thirdPartyId);
 		
 		System.out.println(voteLogList.toString());
 		return null;

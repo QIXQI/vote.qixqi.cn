@@ -4,35 +4,35 @@ import java.util.Date;
 
 public class VoteLog {
 	private int voteId;
-	private Integer userId;			// 游客为空
-	private String voteIp;
+	private Integer userId;			// 本网站的 userId
+	private String thirdPartyId;	// 第三方登录用户的 openid
 	private Date voteTime;
 	
 	/**
 	 * 插入数据 - 构造函数
 	 * @param voteId
 	 * @param userId
-	 * @param voteIp
+	 * @param thirdPartyId
 	 */
-	public VoteLog(int voteId, Integer userId, String voteIp) {
+	public VoteLog(int voteId, Integer userId, String thirdPartyId) {
 		super();
 		this.voteId = voteId;
 		this.userId = userId;
-		this.voteIp = voteIp;
+		this.thirdPartyId = thirdPartyId;
 	}
 
 	/**
 	 * 查找数据 - 构造函数
 	 * @param voteId
 	 * @param userId
-	 * @param voteIp
+	 * @param thirdPartyId
 	 * @param voteTime
 	 */
-	public VoteLog(int voteId, Integer userId, String voteIp, Date voteTime) {
+	public VoteLog(int voteId, Integer userId, String thirdPartyId, Date voteTime) {
 		super();
 		this.voteId = voteId;
 		this.userId = userId;
-		this.voteIp = voteIp;
+		this.thirdPartyId = thirdPartyId;
 		this.voteTime = voteTime;
 	}
 
@@ -52,12 +52,12 @@ public class VoteLog {
 		this.userId = userId;
 	}
 
-	public String getVoteIp() {
-		return voteIp;
+	public String getThirdPartyId() {
+		return thirdPartyId;
 	}
 
-	public void setVoteIp(String voteIp) {
-		this.voteIp = voteIp;
+	public void setThirdPartyId(String thirdPartyId) {
+		this.thirdPartyId = thirdPartyId;
 	}
 
 	public Date getVoteTime() {
@@ -70,7 +70,7 @@ public class VoteLog {
 
 	@Override
 	public String toString() {
-		return "VoteLog [voteId=" + voteId + ", userId=" + userId + ", voteIp=" + voteIp + ", voteTime=" + voteTime
-				+ "]";
+		return "VoteLog [voteId=" + voteId + ", userId=" + userId + ", thirdPartyId=" + thirdPartyId + ", voteTime="
+				+ voteTime + "]";
 	}
 }

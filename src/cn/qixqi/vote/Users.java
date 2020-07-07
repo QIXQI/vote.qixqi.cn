@@ -183,7 +183,7 @@ public class Users {
 							// 使用 userId，替换文件名
 							fileName = userId + fileName.substring(fileName.lastIndexOf("."));
 							
-							Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
+							Visitor visitor = new ProxyVisitor(Priorities.USER);
 							result = updateAvatar(visitor, userId, avatarUrl, fileName, avatarPath);
 							
 							if ("success".equals(result)) {

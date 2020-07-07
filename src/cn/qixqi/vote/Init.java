@@ -54,10 +54,21 @@ public class Init extends BaseDao{
     				"	`user_avatar` varchar(255) default \"/vote/images/avatar/default.jpg\", " + 
     				"	`user_birthday` date default \"1970-01-01\", " + 
     				"	foreign key(`user_priority_id`) references user_priority(`user_priority_id`) " + 
-    				"	on delete cascade on update cascade, " + 
+    				"	on delete set null on update cascade, " + 
     				"	foreign key(`user_status_id`) references user_status(`user_status_id`) " + 
-    				"	on delete cascade on update cascade, " + 
+    				"	on delete set null on update cascade, " + 
     				"	index index_id(`user_id`) " + 
+    				")ENGINE=InnoDB default charset=utf8";
+    		pst = conn.prepareStatement(sql);
+    		pst.executeUpdate();
+    		
+    		// user_bind
+    		sql = "create table if not exists `user_bind`( " + 
+    				"	`user_id` int(11) primary key, " + 
+    				"	`qq_openid` varchar(255) not null, " + 
+    				"	foreign key(`user_id`) references user(`user_id`) " + 
+    				"	on delete cascade on update cascade, " + 
+    				"	index index_id(`qq_openid`) " + 
     				")ENGINE=InnoDB default charset=utf8";
     		pst = conn.prepareStatement(sql);
     		pst.executeUpdate();
@@ -108,7 +119,7 @@ public class Init extends BaseDao{
     		sql = "create table if not exists `vote_log`( " + 
     				"	`vote_id` int(11) not null, " + 
     				"	`user_id` int(11), " + 
-    				"	`vote_ip` varchar(255) not null, " + 
+    				"	`third_party_id` varchar(255), " + 
     				"	`vote_time` timestamp default CURRENT_TIMESTAMP, " + 
     				"	foreign key(`vote_id`) references vote(`vote_id`) " + 
     				"	on delete cascade on update cascade, " + 
@@ -188,8 +199,11 @@ public class Init extends BaseDao{
     		// user_priority 插入数据
     		sql = "insert into user_priority(user_priority_id, user_priority) values (?, ?)";
     		pst = conn.prepareStatement(sql);
-    		pst.setInt(1, -1);
+    		pst.setInt(1, -2);
     		pst.setString(2, "VISITOR");
+    		pst.addBatch();
+    		pst.setInt(1, -1);
+    		pst.setString(2, "THIRD_PARTY_USER");
     		pst.addBatch();
     		pst.setInt(1, 0);
     		pst.setString(2, "USER");

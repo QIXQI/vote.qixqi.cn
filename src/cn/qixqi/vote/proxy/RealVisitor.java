@@ -15,6 +15,7 @@ import cn.qixqi.vote.dao.impl.UserDaoImpl;
 import cn.qixqi.vote.dao.impl.VoteDaoImpl;
 import cn.qixqi.vote.dao.impl.LoginLogDaoImpl;
 import cn.qixqi.vote.dao.impl.VoteLogDaoImpl;
+import cn.qixqi.vote.dao.impl.UserBindDaoImpl;
 import cn.qixqi.vote.factory.*;
 import cn.qixqi.vote.util.OptionDaoFactoryHelper;
 import cn.qixqi.vote.entity.Option;
@@ -258,10 +259,17 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
-	public Date lastVoteTime(int voteId, String voteIp) {
+	public Date lastVoteTime(int voteId, int userId) {
 		// TODO Auto-generated method stub
 		VoteLogDaoImpl vi = new VoteLogDaoImpl();
-		return vi.lastVoteTime(voteId, voteIp);
+		return vi.lastVoteTime(voteId, userId);
+	}
+
+	@Override
+	public Date lastVoteTime(int voteId, String thirdPartyId) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.lastVoteTime(voteId, thirdPartyId);
 	}
 
 	@Override
@@ -277,10 +285,39 @@ public class RealVisitor implements Visitor{
 		VoteLogDaoImpl vi = new VoteLogDaoImpl();
 		return vi.getVoteLogsByUser(userId);
 	}
-	
-	
-	
-	
-	
-	
+
+	@Override
+	public List<VoteLog> getVoteLogsByThirdParty(String thirdPartyId) {
+		// TODO Auto-generated method stub
+		VoteLogDaoImpl vi = new VoteLogDaoImpl();
+		return vi.getVoteLogsByThirdParty(thirdPartyId);
+	}
+
+	@Override
+	public String addQQBind(int userId, String qqOpenId) {
+		// TODO Auto-generated method stub
+		UserBindDaoImpl ubi = new UserBindDaoImpl();
+		return ubi.addQQBind(userId, qqOpenId);
+	}
+
+	@Override
+	public String deleteQQBind(int userId) {
+		// TODO Auto-generated method stub
+		UserBindDaoImpl ubi = new UserBindDaoImpl();
+		return ubi.deleteQQBind(userId);
+	}
+
+	@Override
+	public Integer getUserIdByQQ(String qqOpenId) {
+		// TODO Auto-generated method stub
+		UserBindDaoImpl ubi = new UserBindDaoImpl();
+		return ubi.getUserIdByQQ(qqOpenId);
+	}
+
+	@Override
+	public String getQQOpenId(int userId) {
+		// TODO Auto-generated method stub
+		UserBindDaoImpl ubi = new UserBindDaoImpl();
+		return ubi.getQQOpenId(userId);
+	}
 }

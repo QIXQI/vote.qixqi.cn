@@ -85,7 +85,8 @@ public interface Visitor {
 	public String addVoteLog(VoteLog voteLog);
 	
 	// 最近投票时间
-	public Date lastVoteTime(int voteId, String voteIp);
+	public Date lastVoteTime(int voteId, int userId);
+	public Date lastVoteTime(int voteId, String thirdPartyId);
 	
 	// 某一投票的投票日志
 	public List<VoteLog> getVoteLogsByVote(int voteId);
@@ -93,4 +94,20 @@ public interface Visitor {
 	// 某一用户的投票日志
 	public List<VoteLog> getVoteLogsByUser(int userId);
 	
+	// 某一第三方用户的投票日志
+	public List<VoteLog> getVoteLogsByThirdParty(String thirdPartyId);
+	
+	// *******************************************
+	// 账号绑定
+	// 绑定QQ
+	public String addQQBind(int userId, String qqOpenId);
+	
+	// 取消绑定QQ
+	public String deleteQQBind(int userId);
+	
+	// 获取 userId
+	public Integer getUserIdByQQ(String qqOpenId);
+	
+	// 获取 qq_openid
+	public String getQQOpenId(int userId);
 }

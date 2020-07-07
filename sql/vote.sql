@@ -54,9 +54,9 @@ create table if not exists `user`(
 	`user_avatar` varchar(255) default "/vote/images/avatar/default.jpg",	-- 默认头像
 	`user_birthday` date default "1970-01-01",
 	foreign key(`user_priority_id`) references user_priority(`user_priority_id`)
-	on delete cascade on update cascade,
+	on delete set null on update cascade,		-- 用户不删除
 	foreign key(`user_status_id`) references user_status(`user_status_id`)
-	on delete cascade on update cascade,
+	on delete set null on update cascade,
 	index index_id(`user_id`)
 )ENGINE=InnoDB default charset=utf8;
 
@@ -94,12 +94,23 @@ create table if not exists `user_status`(
 )ENGINE=InnoDB default charset=utf8;
 
 
-insert into user_priority(user_priority_id, user_priority) values (-1, "VISITOR");
+insert into user_priority(user_priority_id, user_priority) values (-2, "VISITOR");
+insert into user_priority(user_priority_id, user_priority) values (-1, "THIRD_PARTY_USER");
 insert into user_priority(user_priority_id, user_priority) values (0, "USER");
 insert into user_priority(user_priority_id, user_priority) values (1, "ADMINISTRATOR");
 
 insert into user_status(user_status_id, user_status) values (0, "OFFLINE");
 insert into user_status(user_status_id, user_status) values (1, "ONLINE");
+
+
+-- 创建 user_bind 表
+create table if not exists `user_bind`(
+	`user_id` int(11) primary key,
+	`qq_openid` varchar(255) not null,
+	foreign key(`user_id`) references user(`user_id`)
+	on delete cascade on update cascade,
+	index index_id(`qq_openid`)
+)ENGINE=InnoDB default charset=utf8;
 
 
 -- 创建 visit_log 表
@@ -183,7 +194,7 @@ create table if not exists `vote`(
 create table if not exists `vote_log`(
 	`vote_id` int(11) not null,
 	`user_id` int(11),	-- 游客投票时为空
-	`vote_ip` varchar(255) not null,
+	`third_party_id` varchar(255),
 	`vote_time` timestamp default CURRENT_TIMESTAMP,
 	foreign key(`vote_id`) references vote(`vote_id`)
 	on delete cascade on update cascade,

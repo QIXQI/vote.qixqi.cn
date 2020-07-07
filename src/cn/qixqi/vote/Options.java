@@ -156,7 +156,7 @@ public class Options {
 		}
 		int optionType = Integer.parseInt(request.getParameter("optionType"));
 		int optionId = Integer.parseInt(request.getParameter("optionId"));
-		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
+		Visitor visitor = new ProxyVisitor(Priorities.THIRD_PARTY_USER);
 		result = visitor.addPoll(optionType, optionId);
 		
 		System.out.println(result);
