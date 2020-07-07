@@ -1,6 +1,8 @@
 package cn.qixqi.vote;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
-
+import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -16,6 +18,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
+
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.qixqi.vote.entity.User;
@@ -35,7 +39,7 @@ public class Users {
 	private static final int MAX_REQUEST_SIZE = 1024 * 1024 * 50;	// 50M
 	
 	@RequestMapping("register.do")
-	public String register(HttpServletRequest request) {
+	public void register(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String userName = request.getParameter("username");
 		String userEmail = request.getParameter("email");
 		String userPhone = request.getParameter("phone");
@@ -44,23 +48,30 @@ public class Users {
 		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
 		String result = visitor.userRegister(user);
 		
-		System.out.println(result);
-		return null;
+		// 返回JSON数据
+		// response.setCharacterEncoding("utf-8");
+		response.setContentType("application/json; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		message.put("result", result);
+		out.println(message.toJSONString());
 	}
 	
 	@RequestMapping("login.do")
-	public String login(HttpServletRequest request) {
+	public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String key = request.getParameter("login_field");
 		String password = request.getParameter("password");
 		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
 		User user = visitor.userLogin(key, password);
 		
-		if (user != null) {
-			System.out.println(user.toString());
-		} else {
-			System.out.println("null");
-		}
-		return null;
+		// 返回JSON数据
+		String result = user != null ? "success" : "error";
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		message.put("result", result);
+		message.put("user", JSON.toJSONString(user));
+		out.println(message.toJSONString());
 	}
 
 	@RequestMapping("logout.do")

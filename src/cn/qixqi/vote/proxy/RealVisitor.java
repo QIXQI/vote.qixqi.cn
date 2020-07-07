@@ -27,7 +27,13 @@ public class RealVisitor implements Visitor{
 	@Override
 	public String userRegister(User user) {
 		UserDaoImpl ui = new UserDaoImpl();
-		return ui.addUser(user);
+		String result = ui.addUser(user);
+		if ("success".equals(result)) {
+			this.logger.info("用户注册成功：" + user.getUserName());
+		} else {
+			this.logger.error("用户注册失败：" + user.getUserName() + ", " + result);
+		}
+		return result;
 	}
 
 	@Override
