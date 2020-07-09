@@ -1,5 +1,8 @@
 $(document).ready(function(){
-	var form = document.getElementById('user_login').getElementsByTagName('form')[0];
+	// QQ登录按钮
+	QC.Login({
+		btnId: 'qqLoginBtn'
+	});
 
 	// 检测用户名或邮箱不能为空
 	function checkIdentity(){       
