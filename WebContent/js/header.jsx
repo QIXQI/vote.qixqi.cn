@@ -126,7 +126,7 @@ Header.defaultProps = {
             },
             {
                 name: '发布',
-                url: 'publishVote.html'
+                url: 'publish.html'
             }
         ]
     ]
@@ -277,11 +277,16 @@ class UserInfo extends React.Component{
        
         this.state = {isDroped: false};
         this.avatarClick = this.avatarClick.bind(this);
+        this.addClick = this.addClick.bind(this);
     }
     
     avatarClick(event){
         event.stopPropagation();
         this.props.updateUserDroped();
+    }
+   
+    addClick(){
+        $(location).attr('href', 'publish.html');
     }
     
     componentWillReceiveProps(newProps){
@@ -305,17 +310,21 @@ class UserInfo extends React.Component{
             return (
                 <div style={this.props.user}>
                     <a href='register.html' style={this.props.a}><b>注册</b></a>
-                    <div style={{display: 'inline-block', marginRight: 32, verticalAlign: 'middle', cursor: 'pointer'}}>
-                        <img src={this.props.userInfo.avatar} alt={this.props.userInfo.openid} 
-                            title={this.props.userInfo.openid} style={{width: 20, height: 20, borderRadius: '50%'}}/>
-                        <span style={this.props.span}></span>
+                    <div style={{display: 'inline-block', marginRight: 32, verticalAlign: 'middle'}}>
+                        <div style={{cursor: 'pointer'}} onClick={this.avatarClick} className='avatarDiv'>
+                            <img className='avatarDiv' src={this.props.userInfo.avatar} alt={this.props.userInfo.openid} 
+                                title={this.props.userInfo.openid} style={{width: 20, height: 20, borderRadius: '50%'}}/>
+                            <span className='avatarDiv' style={this.props.span}></span>
+                        </div>
+                        <UserDrop priority={this.props.priority} userInfo = {this.props.userInfo} isDroped={this.state.isDroped} />
                     </div>
                 </div>
             );
         } else if(this.props.priority >= priorities.USER){
             return (
                 <div style={this.props.user}>
-                    <div style={{display: 'inline-block', marginRight: 32, verticalAlign: 'middle', cursor: 'pointer'}}>
+                    <div style={{display: 'inline-block', marginRight: 32, verticalAlign: 'middle', cursor: 'pointer'}}
+                        onClick={this.addClick}>
                         <img src='images/publish.png' alt='发布' title='发布' style={{width: 20, height: 20}} />
                         <span style={this.props.span}></span>
                     </div>
@@ -407,7 +416,21 @@ class UserDrop extends React.Component{
         if (this.props.priority === priorities.VISITOR){
             return null;
         } else if(this.props.priority === priorities.THIRD_PARTY_USER){
-            
+            return (
+                <div style={this.props.userDrop} id='userDrop'>
+                    <em style={this.props.em}></em><span style={this.props.span}></span>
+                    <div style={this.props.menuHead}>
+                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>绑定账号</p></a>
+                    </div>
+                    <div style={this.props.menuBody}>
+                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>我的投票</p></a>
+                    </div>
+                        <div style={this.props.menuTail}>
+                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>登录日志</p></a>
+                        <p style={this.props.p} className='pHover'>注销</p>
+                    </div>
+                </div>
+            );
         } else if(this.props.priority >= priorities.USER){
             return (
                 <div style={this.props.userDrop} id='userDrop'>

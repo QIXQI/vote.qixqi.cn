@@ -4,6 +4,9 @@
         <meta charset="utf-8" content="text/html" />
         <title>用户登录</title>
         <link type="text/css" rel="stylesheet" href="css/login.css" />
+        <link rel="icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="shortcut icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="images/icon/vote.png" />
     </head>
     <body>
         <div id="white_content"></div>
@@ -18,7 +21,10 @@
                 <label for="password" >密码</label>
                 <a class="label_link" href="./password_reset.html">忘记密码？</a><br />
                 <input type="password" id="password" name="password" tabindex="2" /><br />
-                <input type="submit" name="submit" value="登录" tabindex="3" id="submit" /><br />
+                <div id="loginBtn">
+					<span id="qqLoginBtn"></span>
+                	<input type="submit" name="submit" value="登录" tabindex="3" id="submit" /><br />
+                </div>
             </form>
         </div>
         <div id="create_account">
@@ -26,15 +32,15 @@
                 <a class="label_link" href="./register.html">注册</a>
             </p>
         </div>
-        <span id="qqLoginBtn"></span>
 		<script type="text/javascript" src="./js/react.development.js"></script>
         <script type="text/javascript" src="./js/react-dom.development.js"></script>
         <script type="text/javascript" src="./js/babel.min.js"></script>
         <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
         <script type="text/javascript"  charset="utf-8"
     		src="http://connect.qq.com/qc_jssdk.js"
-    		data-appid="101890438"
-    		data-redirecturi="http://qixqi.club:9080/vote/qqLogin.do"
+    		data-appid="101886555"
+    		data-redirecturi="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js"
+    		data-callback="true"
 		></script>
         <script type="text/javascript" src="./js/login.js"></script>
     </body>

@@ -1,4 +1,9 @@
 $(document).ready(function(){
+	// QQ登录按钮
+	QC.Login({
+		btnId: 'qqLoginBtn'
+	});
+	
 	// 检测用户名
 	function checkUserName(){
 	    if($('#username').val().trim() == ''){       // 用户民不能为空

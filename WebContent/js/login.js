@@ -3,6 +3,8 @@ $(document).ready(function(){
 	QC.Login({
 		btnId: 'qqLoginBtn'
 	});
+	
+	
 
 	// 检测用户名或邮箱不能为空
 	function checkIdentity(){       

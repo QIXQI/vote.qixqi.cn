@@ -4,6 +4,9 @@
         <meta charset="utf-8" content="text/html" />
         <title>用户注册</title>
         <link type="text/css" rel="stylesheet" href="css/register.css" />
+        <link rel="icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="shortcut icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="images/icon/vote.png" />
     </head>
     <body>
         <div class="white_content"></div>
@@ -26,7 +29,10 @@
                 <input type="password" name="password" id="password" tabindex="4" /><br />
                 <label for="confirm_password">确认密码 </label><br />
                 <input type="password" name="confirm_password" id="confirm_password" tabindex="5" /><br />
-                <input type="submit" name="submit" id="submit" value="注册" tabindex="6" /><br />
+                <div id="registerBtn">
+                	<span id="qqLoginBtn"></span>
+                	<input type="submit" name="submit" id="submit" value="注册" tabindex="6" /><br />
+                </div>
             </form>
         </div>
         <div id="login_account">
@@ -38,6 +44,11 @@
         <script type="text/javascript" src="./js/react-dom.development.js"></script>
         <script type="text/javascript" src="./js/babel.min.js"></script>
         <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+		<script type="text/javascript"  charset="utf-8"
+    		src="http://connect.qq.com/qc_jssdk.js"
+    		data-appid="101490224"
+    		data-redirecturi="http://localhost:3000/home"
+		></script>
         <script type="text/javascript" src="./js/register.js"></script>
     </body>
 </html>
