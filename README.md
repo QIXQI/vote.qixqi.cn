@@ -1,4 +1,4 @@
-编译 
+编译 测试
 ```bash
 javac -Djava.ext.dirs=lib/ src/club/qixqi/vote/*.java
 ```
