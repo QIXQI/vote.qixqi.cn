@@ -29,6 +29,12 @@ public class ImgOptionDaoFactory extends OptionDaoFactory{
 		return this.imgOptionDao.addOption(voteId, option);
 	}
 	
+	@Override
+	public String addOptions(int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		return this.imgOptionDao.addOptions(voteId, optionList);
+	}
+
 	// 获取选项
 	@Override
 	public Option getOption(int optionId) {

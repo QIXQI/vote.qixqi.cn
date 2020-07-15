@@ -22,6 +22,9 @@ public interface Visitor {
 	// 用户注销
 	public String userLogout(int userId);
 	
+	// 获取用户信息
+	public User getUserInfo(int userId);
+	
 	// 更新头像
 	public String updateAvatar(int userId, String userAvatar);
 	
@@ -32,7 +35,10 @@ public interface Visitor {
 	public String updateUserInfo(int userId, HashMap<String, Object> map);
 	
 	// 更新密码
-	public String resetPass(int userId, String userPassword);
+	public String resetPass(int userId, String oldPass, String newPass);
+	
+	// 获取用户简要信息
+	public User getSimpleUser(int userId);
 	
 	// *****************************
 	// 投票
@@ -44,14 +50,21 @@ public interface Visitor {
 	
 	// 获取投票
 	public Vote getVote(int voteId);
+	public Vote getVote(String voteName);
 	
 	// 获取用户发布的投票
 	public List<Vote> getVotes(int userId);
+	
+	// 获取所有投票
+	public List<Vote> getVotes();
 	
 	// ***********************
 	// 投票选项
 	// 投票添加选项
 	public String addOption(int optionType, int voteId, Option option);
+	
+	// 投票添加选项列表
+	public String addOptions(int optionType, int voteId, List<Option> optionList);
 	
 	// 获取选项
 	public Option getOption(int optionType, int optionId);
@@ -60,7 +73,7 @@ public interface Visitor {
 	public List<Option> getOptions(int optionType, int voteId);
 	
 	// 投票
-	public String addPoll(int optionType, int optionId);
+	public String addPoll(int optionType, List<Integer> optionIdList);
 	
 	// 删除选项
 	public String deleteOption(int optionType, int optionId);

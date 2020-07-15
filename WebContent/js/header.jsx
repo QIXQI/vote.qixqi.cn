@@ -18,12 +18,15 @@ class Header extends React.Component{
         super(props);
         
         this.state = {
-            priority: priorities.USER,
+            priority: priorities.VISITOR,
+            userInfo: {},
             userDroped: false,
             searchFlag: false
         };
         this.updateUserDroped = this.updateUserDroped.bind(this);
         this.updateSearchFlag = this.updateSearchFlag.bind(this);
+        this.getLoginUser = this.getLoginUser.bind(this);
+        this.userLogout = this.userLogout.bind(this);
     }
     
     updateUserDroped(){
@@ -38,7 +41,65 @@ class Header extends React.Component{
         }));
     }
     
+    getLoginUser(){
+        $.ajax({
+            url: 'getLoginUser.do',
+            type: 'GET',
+            dataType: 'json',
+            async: true,
+            success: function(message){
+                console.log(message);
+                if (message.result === 'success'){
+                    this.setState({
+                        userInfo: message.user,
+                        priority: message.user.userPriority
+                    });
+                }
+            }.bind(this),
+            error: function(err){
+                alert('访问后台发生未知错误');
+                console.error(err.responseText);
+            }.bind(this)
+        });
+    }
+    
+    userLogout(){
+        if (this.state.userInfo.userId === null || this.state.userInfo.userId === undefined){
+            alert('您还未登录');
+            return;
+        }
+        // 发送post请求，注销
+        $.ajax({
+            url: 'logout.do',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                userId: this.state.userInfo.userId
+            },
+            async: true,
+            success: function(message){
+                console.log(message);
+                if (message.result === 'success'){
+                    this.setState({
+                        priority: priorities.VISITOR,
+                        userInfo: {}
+                    });
+                } else{
+                    alert('注销失败: ' + message.result);
+                    console.error(message.result);
+                }
+            }.bind(this),
+            error: function(err){
+                alert('访问后台发生未知错误');
+                console.error(err.responseText);
+            }.bind(this)
+        });
+    }
+    
     componentDidMount(){
+        // 获取登录用户信息
+        this.getLoginUser();
+        
         // 头像悬停框消失
         $(document).click((event) => {
             if ($(event.target).attr('class') === 'avatarDiv'){
@@ -60,8 +121,15 @@ class Header extends React.Component{
         });
     }
     
+    componentDidUpdate(prevProps, prevState){
+        if (this.state.priority === priorities.VISITOR && prevState.priority > priorities.VISITOR){
+            alert('注销成功，即将跳转到主页');
+            $(location).attr('href', 'index.html');
+        }
+    }
+    
 	render(){
-	    const visitorInfo = {};
+	    /* const visitorInfo = {};
 	    
 	    const qqUserInfo = {
             avatar: 'images/g.jpg',
@@ -80,15 +148,15 @@ class Header extends React.Component{
 	        userStatus: Status.ONLINE,
 	        userAvatar: 'images/avatar/default.jpg',
 	        userBirthday: '1999-04-22'
-	    };
+	    }; */
 	    
 		return (
 			<div style = {this.props.style}>
 		        <Icon site={this.props.icon.site} imgUrl={this.props.icon.imgUrl} imgAlt={this.props.icon.imgAlt} imgTitle={this.props.icon.imgTitle}/>
 		        <Menu priority={this.state.priority} menuItems={this.props.menu[this.state.priority + 2]}/>
 		        <Search updateSearchFlag = {this.updateSearchFlag} flag={this.state.searchFlag} />
-		        <UserInfo priority={this.state.priority} userInfo = {userInfo} isDroped={this.state.userDroped}
-		            updateUserDroped = {this.updateUserDroped}/>
+		        <UserInfo priority={this.state.priority} userInfo = {this.state.userInfo} isDroped={this.state.userDroped}
+		            updateUserDroped={this.updateUserDroped} userLogout={this.userLogout} />
 			</div>
 		);
 	}
@@ -101,10 +169,10 @@ Header.defaultProps = {
         backgroundColor: 'rgb(35, 41, 47)'
     },
     icon: {
-        site: 'https://qixqi.cn',
+        site: 'index.html',
         imgUrl: 'images/icon/vote_white.png',
-        imgAlt: 'qixqi.cn',
-        imgTitle: 'qixqi.cn'
+        imgAlt: 'qVote',
+        imgTitle: 'qVote'
     },
     menu: [
         [   // visitor
@@ -334,7 +402,8 @@ class UserInfo extends React.Component{
                                 title={this.props.userInfo.userName} style={{width: 20, height: 20, borderRadius: '50%'}} />
                             <span className='avatarDiv' style={this.props.span}></span>
                         </div>
-                        <UserDrop priority={this.props.priority} userInfo = {this.props.userInfo} isDroped={this.state.isDroped} />
+                        <UserDrop priority={this.props.priority} userInfo = {this.props.userInfo} isDroped={this.state.isDroped} 
+                            userLogout={this.props.userLogout} />
                     </div>
                 </div>
             );
@@ -390,13 +459,19 @@ class UserDrop extends React.Component{
                 // console.log($(event.target).text());
                 $(event.target).css({'background-color': 'rgb(0, 89, 222)', 'color': 'white'});
             }, 
-            () => {
+            (event) => {
                 /* 离开p */
                 $(event.target).css({'background-color': 'white', 'color': '#24292e'});
             });
-        
+       
         /* 阻止userDrop的冒泡事件 */
         $('#userDrop').click(() => {
+            event.stopPropagation();
+        });
+        
+        /* 注销 点击事件*/
+        $('#logout').click(() => {
+            this.props.userLogout();        // 回调给主组件
             event.stopPropagation();
         });
     }
@@ -440,13 +515,13 @@ class UserDrop extends React.Component{
                         <p style={this.props.p}>{this.props.userInfo.userStatus === Status.ONLINE ? '在线' : '离线'}</p>
                     </div>
                     <div style={this.props.menuBody}>
-                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>个人信息</p></a>
-                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>我的发布</p></a>
-                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>我的投票</p></a>
+                        <a href='userInfo.html' style={this.props.a}><p style={this.props.p} className='pHover'>个人信息</p></a>
+                        <a href='myPublish.html' style={this.props.a}><p style={this.props.p} className='pHover'>我的发布</p></a>
+                        <a href='myVoteLog.html' style={this.props.a}><p style={this.props.p} className='pHover'>我的投票</p></a>
                     </div>
                     <div style={this.props.menuTail}>
-                        <a href='' style={this.props.a}><p style={this.props.p} className='pHover'>登录日志</p></a>
-                        <p style={this.props.p} className='pHover'>注销</p>
+                        <a href='myLoginLog.html' style={this.props.a}><p style={this.props.p} className='pHover'>登录日志</p></a>
+                        <p style={{padding: '4px 16px', cursor: 'pointer'}} className='pHover' id='logout'>注销</p>
                     </div>
                 </div>    
             );

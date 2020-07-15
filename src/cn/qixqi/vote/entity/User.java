@@ -17,6 +17,23 @@ public class User {
 	private Date userBirthday;
 	
 	/**
+	 * 获取用户简略信息 - 构造函数
+	 * @param userId
+	 * @param userName
+	 * @param userPriority
+	 * @param userStatus
+	 * @param userAvatar
+	 */
+	public User(int userId, String userName, int userPriority, int userStatus, String userAvatar) {
+		super();
+		this.userId = userId;
+		this.userName = userName;
+		this.userPriority = userPriority;
+		this.userStatus = userStatus;
+		this.userAvatar = userAvatar;
+	}
+
+	/**
 	 * 注册用户 - 构造函数
 	 * @param userName
 	 * @param userPassword

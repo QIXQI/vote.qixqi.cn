@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Date;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -58,6 +59,37 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 	}
 
 	@Override
+	public User getSimpleUser(int userId) {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		User user = null;
+		String sql = "select user_name, user_priority_id, user_status_id, user_avatar " +
+				"from user where user_id = ?";
+		try {
+			pst = conn.prepareStatement(sql);
+			pst.setInt(1, userId);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				String userName = rs.getString(1);
+				int userPriorityId = rs.getInt(2);
+				int userStatusId = rs.getInt(3);
+				String userAvatar = rs.getString(4);
+				user = new User(userId, userName, userPriorityId, userStatusId, userAvatar);
+				this.logger.info("查询用户 " + userId + "成功");
+			} else {
+				this.logger.error("查询用户 " + userId + "失败");
+			}
+		} catch(SQLException se) {
+			user = null;
+			this.logger.error(se.getMessage());
+		}
+		closeAll(conn, pst, rs);
+		return user;
+	}
+
+	@Override
 	public String getUserAvatar(int userId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
@@ -71,7 +103,7 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 			rs = pst.executeQuery();
 			if (rs.next()) {
 				result = rs.getString(1);
-				this.logger.error("用户 " + userId + "头像链接为: " + result);
+				this.logger.info("用户 " + userId + "头像链接为: " + result);
 			} else {
 				this.logger.error("用户 " + userId + "不存在");
 			}
@@ -163,19 +195,20 @@ public class UserDaoImpl extends BaseDao implements UserDao{
 	}
 
 	@Override
-	public String resetPass(int userId, String userPassword) {
+	public String resetPass(int userId, String oldPass, String newPass) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
 		String result = "success";
-		String sql = "update user set user_password = ? where user_id = ?";
+		String sql = "update user set user_password = ? where user_id = ? and user_password = ?";
 		try {
 			pst = conn.prepareStatement(sql);
-			pst.setString(1, userPassword);
+			pst.setString(1, newPass);
 			pst.setInt(2, userId);
+			pst.setString(3, oldPass);
 			int rowCount = pst.executeUpdate();
 			if (rowCount == 0) {
-				result = "用户 " + userId + "不存在";
+				result = "用户 " + userId + "原密码错误";
 				this.logger.error(result);
 			}
 		} catch(SQLException se) {

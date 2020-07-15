@@ -175,7 +175,7 @@ where ll1.user_id = ? and ll1.login_time = ll2.lastTime;
 create table if not exists `vote`(
 	`vote_id` int(11) primary key auto_increment,
 	`user_id` int(11) not null,
-	`vote_name` varchar(255) not null,
+	`vote_name` varchar(255) unique not null,
 	`vote_type` int(5) default 0,		-- 投票类型：0普通投票/1图片/2音频/3视频
 	`vote_start_time` timestamp default CURRENT_TIMESTAMP,
 	`vote_end_time` timestamp not null, -- 投票结束时间

@@ -99,7 +99,7 @@ public class Init extends BaseDao{
     		sql = "create table if not exists `vote`( " + 
     				"	`vote_id` int(11) primary key auto_increment, " + 
     				"	`user_id` int(11) not null, " + 
-    				"	`vote_name` varchar(255) not null, " + 
+    				"	`vote_name` varchar(255) unique not null, " + 
     				"	`vote_type` int(5) default 0, " + 
     				"	`vote_start_time` timestamp default CURRENT_TIMESTAMP, " + 
     				"	`vote_end_time` timestamp not null, " + 

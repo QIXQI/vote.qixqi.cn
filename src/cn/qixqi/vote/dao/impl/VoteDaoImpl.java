@@ -113,6 +113,42 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 	}
 
 	@Override
+	public Vote getVote(String voteName) {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		Vote vote = null;
+		String sql = "select vote_id, vote_type, vote_start_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
+				"from vote where vote_name = ?";
+		try {
+			pst = conn.prepareStatement(sql);
+			pst.setString(1, voteName);
+			rs = pst.executeQuery();
+			if (rs.next()) {
+				int voteId = rs.getInt(1);
+				int voteType = rs.getInt(2);
+				Date voteStartTime = rs.getTimestamp(3);
+				Date voteEndTime = rs.getTimestamp(4);
+				String voteDesc1 = rs.getString(5);
+				String voteDesc2 = rs.getString(6);
+				String voteDesc3 = rs.getString(7);
+				String voteDesc4 = rs.getString(8);
+				String voteDesc5 = rs.getString(9);
+				int optionNumber = rs.getInt(10);
+				vote = new Vote(voteId, voteName, voteType, voteStartTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber);
+			} else {
+				this.logger.error("投票 " + voteName + "不存在");
+			}
+		} catch(SQLException se) {
+			vote = null;
+			this.logger.error(se.getMessage());
+		}
+		closeAll(conn, pst, rs);
+		return vote;
+	}
+
+	@Override
 	public List<Vote> getVotes(int userId) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
@@ -120,10 +156,44 @@ public class VoteDaoImpl extends BaseDao implements VoteDao{
 		ResultSet rs = null;
 		List<Vote> voteList = new ArrayList<Vote>();
 		String sql = "select vote_id, vote_name, vote_type, vote_start_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
-				"from vote where user_id = ?";
+				"from vote where user_id = ? order by vote_start_time desc";
 		try {
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, userId);
+			rs = pst.executeQuery();
+			while (rs.next()) {
+				int voteId = rs.getInt(1);
+				String voteName = rs.getString(2);
+				int voteType = rs.getInt(3);
+				Date voteStartTime = rs.getTimestamp(4);
+				Date voteEndTime = rs.getTimestamp(5);
+				String voteDesc1 = rs.getString(6);
+				String voteDesc2 = rs.getString(7);
+				String voteDesc3 = rs.getString(8);
+				String voteDesc4 = rs.getString(9);
+				String voteDesc5 = rs.getString(10);
+				int optionNumber = rs.getInt(11);
+				voteList.add(new Vote(voteId, voteName, voteType, voteStartTime, voteEndTime, voteDesc1, voteDesc2, voteDesc3, voteDesc4, voteDesc5, optionNumber));
+			}
+		} catch(SQLException se) {
+			voteList = null;
+			this.logger.error(se.getMessage());
+		}
+		closeAll(conn, pst, rs);
+		return voteList;
+	}
+
+	@Override
+	public List<Vote> getVotes() {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+		List<Vote> voteList = new ArrayList<Vote>();
+		String sql = "select vote_id, vote_name, vote_type, vote_start_time, vote_end_time, vote_desc1, vote_desc2, vote_desc3, vote_desc4, vote_desc5, option_number " +
+				"from vote order by vote_start_time desc";
+		try {
+			pst = conn.prepareStatement(sql);
 			rs = pst.executeQuery();
 			while (rs.next()) {
 				int voteId = rs.getInt(1);

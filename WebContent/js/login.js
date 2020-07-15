@@ -4,6 +4,32 @@ $(document).ready(function(){
 		btnId: 'qqLoginBtn'
 	});
 	
+	// 获取当前登录用户基本信息
+	var paras = {
+	    oauth_consumer_key: 101886875
+	};
+	
+	QC.api('get_user_info', paras)
+		.success(function(s){
+			// 成功回调
+			alert('调用get_user_info 接口成功! 当前用户昵称：' + s.data.nickname);
+		})
+		.error(function(f){
+			// 失败回调
+			alert('调用get_user_info 接口失败！');
+		})
+		.complete(function(c){
+			// 完成请求回调
+			alert('调用get_user_info 接口完成！');
+		});
+	
+	// 获取openid 和 accessToken
+	if (QC.Login.check()){
+		// 如果已经登录
+		QC.Login.getMe(function(openId, accessToken){
+			alert('openId: ' + openId + ', accessToken: ' + accessToken);
+		});
+	}
 	
 
 	// 检测用户名或邮箱不能为空
@@ -48,7 +74,7 @@ $(document).ready(function(){
 					var result = data.result;
 					if (result === 'success'){
 						alert('登录成功，即将跳转');
-						alert(data.user);
+						// alert(data.user);
 						console.log(data.user);
 						$(location).attr('href', 'index.html');
 					} else{

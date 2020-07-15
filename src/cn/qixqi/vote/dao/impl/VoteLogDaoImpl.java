@@ -59,7 +59,9 @@ public class VoteLogDaoImpl extends BaseDao implements VoteLogDao{
 			rs = pst.executeQuery();
 			if (rs.next()) {
 				voteTime = rs.getTimestamp(1);
-			} else {
+			} 
+			if (voteTime == null){
+				voteTime = new Date(0);
 				this.logger.info("用户 " + userId + "还没有投过 " + voteId);
 			}
 		} catch(SQLException se) {
@@ -84,7 +86,9 @@ public class VoteLogDaoImpl extends BaseDao implements VoteLogDao{
 			rs = pst.executeQuery();
 			if (rs.next()) {
 				voteTime = rs.getTimestamp(1);
-			} else {
+			} 
+			if (voteTime == null){
+				voteTime = new Date(0);
 				this.logger.info("第三方用户 " + thirdPartyId + "还没有投过 " + voteId);
 			}
 		} catch(SQLException se) {
@@ -102,7 +106,7 @@ public class VoteLogDaoImpl extends BaseDao implements VoteLogDao{
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<VoteLog> voteLogList = new ArrayList<VoteLog>();
-		String sql = "select user_id, third_party_id, vote_time from vote_log where vote_id = ?";
+		String sql = "select user_id, third_party_id, vote_time from vote_log where vote_id = ? order by vote_time desc";
 		try {
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, voteId);
@@ -128,7 +132,7 @@ public class VoteLogDaoImpl extends BaseDao implements VoteLogDao{
 		PreparedStatement pst = null;
 		ResultSet rs = null;
 		List<VoteLog> voteLogList = new ArrayList<VoteLog>();
-		String sql = "select vote_id, third_party_id, vote_time from vote_log where user_id = ?";
+		String sql = "select vote_id, third_party_id, vote_time from vote_log where user_id = ? order by vote_time desc";
 		try {
 			pst = conn.prepareStatement(sql);
 			pst.setInt(1, userId);

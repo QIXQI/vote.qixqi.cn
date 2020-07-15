@@ -40,12 +40,32 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
+	public User getSimpleUser(int userId) {
+		// TODO Auto-generated method stub
+		if (priority >= Priorities.VISITOR) {
+			return realVisitor.getSimpleUser(userId);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public String userLogout(int userId) {
 		// TODO Auto-generated method stub
 		if (priority >= Priorities.USER) {
 			return realVisitor.userLogout(userId);
 		} else {
 			return "您还未登录";
+		}
+	}
+
+	@Override
+	public User getUserInfo(int userId) {
+		// TODO Auto-generated method stub
+		if (priority >= Priorities.USER) {
+			return realVisitor.getUserInfo(userId);
+		} else {
+			return null;
 		}
 	}
 
@@ -80,10 +100,10 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
-	public String resetPass(int userId, String userPassword) {
+	public String resetPass(int userId, String oldPass, String newPass) {
 		// TODO Auto-generated method stub
 		if (priority >= Priorities.USER) {
-			return realVisitor.resetPass(userId, userPassword);
+			return realVisitor.resetPass(userId, oldPass, newPass);
 		} else {
 			return "权限不够";
 		}
@@ -120,6 +140,16 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
+	public Vote getVote(String voteName) {
+		// TODO Auto-generated method stub
+		if (priority >= Priorities.VISITOR) {
+			return realVisitor.getVote(voteName);
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public List<Vote> getVotes(int userId) {
 		// TODO Auto-generated method stub
 		if (priority >= Priorities.USER) {
@@ -130,10 +160,30 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
+	public List<Vote> getVotes() {
+		// TODO Auto-generated method stub
+		if (priority >= Priorities.VISITOR) {
+			return realVisitor.getVotes();
+		} else {
+			return null;
+		}
+	}
+
+	@Override
 	public String addOption(int optionType, int voteId, Option option) {
 		// TODO Auto-generated method stub
 		if (priority >= Priorities.USER) {
 			return realVisitor.addOption(optionType, voteId, option);
+		} else {
+			return "权限不够";
+		}
+	}
+
+	@Override
+	public String addOptions(int optionType, int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		if (priority >= Priorities.USER) {
+			return realVisitor.addOptions(optionType, voteId, optionList);
 		} else {
 			return "权限不够";
 		}
@@ -160,10 +210,10 @@ public class ProxyVisitor implements Visitor{
 	}
 
 	@Override
-	public String addPoll(int optionType, int optionId) {
+	public String addPoll(int optionType, List<Integer> optionIdList) {
 		// TODO Auto-generated method stub
 		if (priority >= Priorities.THIRD_PARTY_USER) {
-			return realVisitor.addPoll(optionType, optionId);
+			return realVisitor.addPoll(optionType, optionIdList);
 		} else {
 			return "权限不够";
 		}

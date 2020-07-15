@@ -17,8 +17,8 @@ public abstract class OptionDaoFactory {
 	
 	// *********完全继承********************
 	// 投票
-	public String addPoll(int optionId) {
-		return optionDao.addPoll(optionId);
+	public String addPoll(List<Integer> optionIdList) {
+		return optionDao.addPoll(optionIdList);
 	}
 	
 	// 删除选项
@@ -33,6 +33,8 @@ public abstract class OptionDaoFactory {
 	
 	// **************延迟到子类实现******************
 	public abstract String addOption(int voteId, Option option);
+	
+	public abstract String addOptions(int voteId, List<Option> optionList);
 	
 	public abstract Option getOption(int optionId);
 	

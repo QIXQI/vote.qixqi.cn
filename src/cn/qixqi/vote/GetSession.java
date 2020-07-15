@@ -8,7 +8,9 @@ package cn.qixqi.vote;
 import java.util.Locale;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,6 +24,8 @@ import javax.naming.InitialContext;
 import javax.naming.Context;
 import javax.sql.DataSource;
 
+import cn.qixqi.vote.entity.User;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.stereotype.Controller;
 
@@ -30,6 +34,21 @@ import com.alibaba.fastjson.JSON;
 
 @Controller
 public class GetSession{
+	@RequestMapping("/getUser")
+	public void getUser(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		JSONObject message = new JSONObject();
+		if (session.isNew() || session.getAttribute("user") == null) {
+			message.put("user", "你还未登录");
+		} else {
+			User user = (User) session.getAttribute("user");
+			message.put("user", JSON.toJSONString(user));
+		}
+		
+		response.setContentType("text/html; charset=utf-8");
+		PrintWriter out = response.getWriter();
+		out.println(message.toJSONString());
+	}
+	
     @RequestMapping("/getSession")
     public void getSession(Locale locale, HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException{
         if(session.isNew()){

@@ -31,11 +31,40 @@ public class AudioOptionDaoImpl extends BaseDao implements AudioOptionDao{
 			pst.setInt(1, voteId);
 			pst.setString(2, audioOption.getAudioUrl());
 			pst.setString(3, audioOption.getOptionDesc1());
-			pst.setString(4, audioOption.getOptoinDesc2());
+			pst.setString(4, audioOption.getOptionDesc2());
 			pst.setString(5, audioOption.getOptionDesc3());
 			pst.setString(6, audioOption.getOptionDesc4());
 			pst.setString(7, audioOption.getOptionDesc5());
 			pst.executeUpdate();
+		} catch(SQLException se) {
+			result = se.getMessage();
+			this.logger.error(se.getMessage());
+		}
+		closeAll(conn, pst, null);
+		return result;
+	}
+
+	@Override
+	public String addOptions(int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		Connection conn = getConnection();
+		PreparedStatement pst = null;
+		String result = "success";
+		String sql = "insert into audio_option(vote_id, audio_url, option_desc1, option_desc2, option_desc3, option_desc4, option_desc5) values (?, ?, ?, ?, ?, ?, ?)";
+		try {
+			pst = conn.prepareStatement(sql);
+			for (Option option : optionList) {
+				AudioOption audioOption = (AudioOption) option;
+				pst.setInt(1, voteId);
+				pst.setString(2, audioOption.getAudioUrl());
+				pst.setString(3, audioOption.getOptionDesc1());
+				pst.setString(4, audioOption.getOptionDesc2());
+				pst.setString(5, audioOption.getOptionDesc3());
+				pst.setString(6, audioOption.getOptionDesc4());
+				pst.setString(7, audioOption.getOptionDesc5());
+				pst.addBatch();
+			}
+			pst.executeBatch();
 		} catch(SQLException se) {
 			result = se.getMessage();
 			this.logger.error(se.getMessage());
@@ -139,7 +168,7 @@ public class AudioOptionDaoImpl extends BaseDao implements AudioOptionDao{
 	}
 
 	@Override
-	public String addPoll(int optionId) {
+	public String addPoll(List<Integer> optionIdList) {
 		// TODO Auto-generated method stub
 		Connection conn = getConnection();
 		PreparedStatement pst = null;
@@ -147,11 +176,17 @@ public class AudioOptionDaoImpl extends BaseDao implements AudioOptionDao{
 		String sql = "update audio_option set option_poll = option_poll + 1 where option_id = ?";
 		try {
 			pst = conn.prepareStatement(sql);
-			pst.setInt(1, optionId);
-			int rowCount = pst.executeUpdate();
-			if (rowCount == 0) {
-				result = "选项" + optionId + "不存在";
-				this.logger.error(result);
+			for (int optionId : optionIdList) {
+				pst.setInt(1, optionId);
+				pst.addBatch();
+			}
+			int[] rows = pst.executeBatch();
+			for (int row : rows) {
+				if ( row <= 0) {
+					result = "optionIdList 中有optionId不存在";
+					this.logger.error(result);
+					break;
+				}
 			}
 		} catch(SQLException se) {
 			result = se.getMessage();

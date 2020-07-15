@@ -29,6 +29,12 @@ public class VideoOptionDaoFactory extends OptionDaoFactory{
 		return this.videoOptionDao.addOption(voteId, option);
 	}
 	
+	@Override
+	public String addOptions(int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		return this.videoOptionDao.addOptions(voteId, optionList);
+	}
+
 	// 获取选项
 	@Override
 	public Option getOption(int optionId) {

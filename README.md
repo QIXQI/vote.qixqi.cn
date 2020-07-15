@@ -25,6 +25,13 @@ javac -Djava.ext.dirs=lib/ src/club/qixqi/vote/*.java
 	* 邮箱：正则表达式
 	* 手机号：check
 
+#### 重大错误
+login, register, publish 页面error_message的closeX事件，第二次关不掉，或关闭事件执行多次
+
+#### 数据库聚合函数 null
+select max(vote_time) from vote_log where user_id = ? and vote_id;
+这句sql查询，结果的条数必为1，就是不存在对应的user_id 和 vote_id，也为1，返回null
+
 
 # docker 端口映射
 1. nginx 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh">
+	<head>
+		<meta charset="UTF-8">
+		<title>添加选项</title>
+		<link rel="stylesheet" href="css/jsuites.css" type="text/css" />
+		<link rel="stylesheet" href="css/jexcel.css" type="text/css" />
+		<link rel="stylesheet" href="css/addOption.css" type="text/css" />
+		<link rel="icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="shortcut icon" type="image/x-icon" sizes="128x128" href="images/icon/vote_128.ico" />
+		<link rel="apple-touch-icon" type="image/png" href="images/icon/vote.png" />
+	</head>
+	<body>
+		<!-- 顶部导航栏 -->
+		<div id="header"></div>
+		<div id="optionBtn">
+			<input type="button" name="delete" value="删除" tabindex="2" id="delete" title="删除该投票" />
+			<input type="button" name="submit" value="提交" tabindex="3" id="submit" title="提交选项" />
+			<input type="file" id="fileUpload" name="fileUpload" accept="image/*" />
+		</div>
+		<div id="addOption"></div> 
+		<script type="text/javascript" src="./js/react.development.js"></script>
+        <script type="text/javascript" src="./js/react-dom.development.js"></script>
+        <script type="text/javascript" src="./js/babel.min.js"></script>
+        <script type="text/javascript" src="./js/jquery-3.4.1.min.js"></script>
+        <script type="text/babel" src="./js/header.jsx"></script>
+        <script type="text/javascript" src="./js/jexcel.js"></script>
+        <script type="text/javascript" src="./js/jsuites.js"></script>
+        <script type="text/javascript" src="./js/addOption.js"></script>
+	</body>
+</html>

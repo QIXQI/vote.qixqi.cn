@@ -58,6 +58,13 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
+	public User getSimpleUser(int userId) {
+		// TODO Auto-generated method stub
+		UserDaoImpl ui = new UserDaoImpl();
+		return ui.getSimpleUser(userId);
+	}
+
+	@Override
 	public String userLogout(int userId) {
 		// TODO Auto-generated method stub
 		UserDaoImpl ui = new UserDaoImpl();
@@ -70,6 +77,19 @@ public class RealVisitor implements Visitor{
 			this.logger.error("用户 " + userId + "注销失败: " + result);
 		}
 		return result;
+	}
+
+	@Override
+	public User getUserInfo(int userId) {
+		// TODO Auto-generated method stub
+		UserDaoImpl ui = new UserDaoImpl();
+		User user = ui.getUser(userId);
+		if (user == null) {
+			this.logger.error("用户" + userId + " 获取信息失败");
+		} else {
+			this.logger.info("用户" + userId + " 获取信息成功");
+		}
+		return user;
 	}
 
 	@Override
@@ -114,14 +134,14 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
-	public String resetPass(int userId, String userPassword) {
+	public String resetPass(int userId, String oldPass, String newPass) {
 		// TODO Auto-generated method stub
 		UserDaoImpl ui = new UserDaoImpl();
-		String result = ui.resetPass(userId, userPassword);
+		String result = ui.resetPass(userId, oldPass, newPass);
 		if ("success".equals(result)) {
-			this.logger.info("用户 " + userId + "更新密码 " + userPassword + "成功");
+			this.logger.info("用户 " + userId + "更新密码 " + newPass + "成功");
 		} else {
-			this.logger.error("用户 " + userId + "更新密码 " + userPassword + "失败: " + result);
+			this.logger.error("用户 " + userId + "更新密码 " + newPass + "失败: " + result);
 		}
 		return result;
 	}
@@ -160,10 +180,24 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
+	public Vote getVote(String voteName) {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		return vi.getVote(voteName);
+	}
+
+	@Override
 	public List<Vote> getVotes(int userId) {
 		// TODO Auto-generated method stub
 		VoteDaoImpl vi = new VoteDaoImpl();
 		return vi.getVotes(userId);
+	}
+
+	@Override
+	public List<Vote> getVotes() {
+		// TODO Auto-generated method stub
+		VoteDaoImpl vi = new VoteDaoImpl();
+		return vi.getVotes();
 	}
 
 	@Override
@@ -176,6 +210,18 @@ public class RealVisitor implements Visitor{
 			return result;
 		}
 		return factory.addOption(voteId, option);
+	}
+
+	@Override
+	public String addOptions(int optionType, int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
+		if (factory == null) {
+			String result = "选项类型: " + optionType + "不存在";
+			this.logger.error(result);
+			return result;
+		}
+		return factory.addOptions(voteId, optionList);
 	}
 
 	@Override
@@ -201,7 +247,7 @@ public class RealVisitor implements Visitor{
 	}
 
 	@Override
-	public String addPoll(int optionType, int optionId) {
+	public String addPoll(int optionType, List<Integer> optionIdList) {
 		// TODO Auto-generated method stub
 		OptionDaoFactory factory = OptionDaoFactoryHelper.getFactory(optionType);
 		if (factory == null) {
@@ -209,7 +255,7 @@ public class RealVisitor implements Visitor{
 			this.logger.error(result);
 			return result;
 		}
-		return factory.addPoll(optionId);
+		return factory.addPoll(optionIdList);
 	}
 
 	@Override

@@ -30,6 +30,12 @@ public class NormbalOptionDaoFactory extends OptionDaoFactory{
 		return this.normbalOptionDao.addOption(voteId, option);
 	}
 	
+	@Override
+	public String addOptions(int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		return this.normbalOptionDao.addOptions(voteId, optionList);
+	}
+
 	// 获取选项
 	@Override
 	public Option getOption(int optionId) {

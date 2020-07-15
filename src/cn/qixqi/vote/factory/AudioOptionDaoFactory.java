@@ -29,6 +29,12 @@ public class AudioOptionDaoFactory extends OptionDaoFactory{
 		return this.audioOptionDao.addOption(voteId, option);
 	}
 	
+	@Override
+	public String addOptions(int voteId, List<Option> optionList) {
+		// TODO Auto-generated method stub
+		return this.audioOptionDao.addOptions(voteId, optionList);
+	}
+
 	// 获取选项
 	@Override
 	public Option getOption(int optionId) {

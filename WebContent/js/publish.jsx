@@ -36,7 +36,7 @@ ErrorMessage.defaultProps = {
         paddingLeft: 40,
         paddingTop: 5,
         position: 'relative',
-        display: 'block'
+        display: 'none'
     },
     label: {color: 'rgb(149, 9, 19)'},
     button: {
@@ -53,6 +53,82 @@ ErrorMessage.defaultProps = {
 class VotePublish extends React.Component{
     constructor(props){
         super(props);
+        
+        this.submitClick = this.submitClick.bind(this);
+        this.cancelClick = this.cancelClick.bind(this);
+        this.checkVote = this.checkVote.bind(this);
+    }
+   
+    cancelClick(){
+        alert('cancel');
+    }
+    
+    submitClick(){
+        if (!this.checkVote()){
+            this.props.inputError();
+            return;
+        }
+        // 发送提交请求
+        var reqData = {
+            voteName: $('#voteName').val().trim(),
+            voteType: $('#voteType').val().trim(),
+            voteEndTime: $('#voteEndTime').val().trim(),
+            voteDesc1: $('#voteDesc1').val().trim()
+        };
+        var index = 2;
+        if ($('#voteDesc2').val().trim() !== ''){
+            reqData['voteDesc' + index] = $('#voteDesc2').val().trim();
+            index = index + 1;
+        }
+        if ($('#voteDesc3').val().trim() !== ''){
+            reqData['voteDesc' + index] = $('#voteDesc3').val().trim();
+            index = index + 1;
+        }
+        if ($('#voteDesc4').val().trim() !== ''){
+            reqData['voteDesc' + index] = $('#voteDesc4').val().trim();
+            index = index + 1;
+        }
+        if ($('#voteDesc5').val().trim() !== ''){
+            reqData['voteDesc' + index] = $('#voteDesc5').val().trim();
+            index = index + 1;
+        }
+        $.ajax({
+            url: 'publishVote.do',
+            type: 'POST',
+            dataType: 'json',
+            data: reqData,
+            async: true,
+            success: function(data){
+                var result = data.result;
+                if (result === 'success'){
+                    alert('发布成功，即将跳转');
+                    $(location).attr('href', 'addOption.html?voteName=' + reqData.voteName);
+                } else{
+                    alert('发布失败');
+                    console.error(result);
+                }
+            },
+            error: function(err){
+                alert('发布失败');
+                console.error(err.responseText);
+            }
+        });
+    }
+    
+    checkVote(){
+        if ($('#voteName').val().trim() === ''){
+            return false;
+        }
+        if ($('#voteType').val().trim() === ''){
+            return false;
+        }
+        if ($('#voteEndTime').val().trim() === ''){
+            return false;
+        }
+        if ($('#voteDesc1').val().trim() === ''){
+            return false;
+        }
+        return true;
     }
     
     render(){
@@ -81,8 +157,10 @@ class VotePublish extends React.Component{
                     <label htmlFor="voteDesc5">投票描述5</label><br />
                     <input style={this.props.inputStyle} type="text" id="voteDesc5" name="voteDesc5" tabindex="8" /><br />
                     <div id="voteBtn">
-                        <input style={this.props.cancelStyle} type="button" name="cancel" id="cancel" value="取消" tabindex="9" />
-                        <input style={this.props.submitStyle} type="submit" name="publish" id="publish" value="提交" tabindex="10" />
+                        <input style={this.props.cancelStyle} type="button" name="cancel" id="cancel" value="取消" tabindex="9" 
+                            onClick={this.cancelClick} />
+                        <input style={this.props.submitStyle} type="button" name="publish" id="publish" value="提交" tabindex="10" 
+                            onClick={this.submitClick} />
                     </div>
                 </form>
             </div>
@@ -148,13 +226,20 @@ VotePublish.defaultProps = {
 class Vote extends React.Component{
     constructor(props){
         super(props);
+        
+        this.inputError = this.inputError.bind(this);
+    }
+    
+    inputError(){
+        $('#error_message').css('display', 'block');
+        $(window).scrollTop('#error_message');
     }
     
     render(){
         return(
             <div>
                 <ErrorMessage />
-                <VotePublish />
+                <VotePublish inputError={this.inputError}/>
             </div>
         );
     }

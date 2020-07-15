@@ -11,6 +11,8 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
@@ -22,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
+import cn.qixqi.vote.entity.LoginLog;
 import cn.qixqi.vote.entity.User;
 import cn.qixqi.vote.proxy.Visitor;
 import cn.qixqi.vote.proxy.ProxyVisitor;
@@ -58,11 +61,31 @@ public class Users {
 	}
 	
 	@RequestMapping("login.do")
-	public void login(HttpServletRequest request, HttpServletResponse response) throws IOException {
+	public void login(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		if (session.getAttribute("user") != null) {
+			session.removeAttribute("user");
+			this.logger.info("切换账号，清空session");
+		}
 		String key = request.getParameter("login_field");
 		String password = request.getParameter("password");
 		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
 		User user = visitor.userLogin(key, password);
+		
+		// session 保存用户信息
+		if (user != null) {
+			session.setAttribute("user", user);
+		}
+		
+		// 添加登录日志
+		if (user != null) {
+			visitor = new ProxyVisitor(Priorities.USER);
+			LoginLog loginLog = new LoginLog(user.getUserId(), getUserIp(request));
+			if ("success".equals(visitor.addLoginLog(loginLog))){
+				this.logger.info("添加登录日志成功");
+			} else {
+				this.logger.error("添加登录日志失败");
+			}
+		}
 		
 		// 返回JSON数据
 		String result = user != null ? "success" : "error";
@@ -73,65 +96,152 @@ public class Users {
 		message.put("user", JSON.toJSONString(user));
 		out.println(message.toJSONString());
 	}
+	
+	@RequestMapping("getLoginUser.do")
+	public void getLoginUser(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String result = "noLogined";
+		JSONObject message = new JSONObject();
+		if (session.getAttribute("user") != null) {
+			message.put("user", (User)session.getAttribute("user"));
+			result = "success";
+		}
+		
+		// 返回json数据
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		message.put("result", result);
+		out.println(message.toJSONString());
+	}
 
 	@RequestMapping("logout.do")
-	public String logout(HttpServletRequest request) {
+	public void logout(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String result = "success";
 		if (request.getParameter("userId") == null) {
-			return null;
+			result = "userId 为空";
+			this.logger.error(result);
+		} else if (session.getAttribute("user") == null){
+			result = "您还未登录";
+			this.logger.error(result);
+		} else {
+			int userId = Integer.parseInt(request.getParameter("userId"));
+			User user = (User) session.getAttribute("user");
+			if (userId != user.getUserId()) {
+				result = "您还未登录";
+				this.logger.error(result);
+			} else {
+				session.removeAttribute("user");
+				Visitor visitor = new ProxyVisitor(Priorities.USER);
+				result = visitor.userLogout(userId);
+			}
 		}
-		int userId = Integer.parseInt(request.getParameter("userId"));
-		Visitor visitor = new ProxyVisitor(Priorities.USER);
-		String result = visitor.userLogout(userId);
 		
-		System.out.println(result);
-		return null;
+		// 返回json数据
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		message.put("result", result);
+		out.println(message.toJSONString());
 	}
 	
 	@RequestMapping("resetPass.do")
-	public String resetPass(HttpServletRequest request) {
+	public void resetPass(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String result = null;
+		if (session.getAttribute("user") == null) {
+			result = "您还未登录";
+			this.logger.error(result);
+		} else if (request.getParameter("userId") == null) {
+			result = "userId 为空";
+			this.logger.error(result);
+		} else {
+			int userId = Integer.parseInt(request.getParameter("userId"));
+			String oldPass = request.getParameter("oldPass");
+			String newPass = request.getParameter("newPass");
+			
+			User user = (User) session.getAttribute("user");
+			if (userId != user.getUserId()) {
+				result = "请更改当前登录用户的密码";
+				this.logger.error(result);
+			} else {
+				Visitor visitor = new ProxyVisitor(Priorities.USER);
+				result = visitor.resetPass(userId, oldPass, newPass);
+			}
+		}
+		
+		// 返回json数据
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		message.put("result", result);
+		out.println(message.toJSONString());
+	}
+	
+	@RequestMapping("getSimpleUser.do")
+	public void getSimpleUser(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		int userId = -1;
 		if (request.getParameter("userId") != null) {
 			userId = Integer.parseInt(request.getParameter("userId"));
 		}
-		String userPassword = request.getParameter("userPassword");
-		Visitor visitor = new ProxyVisitor(Priorities.USER);
-		String result = visitor.resetPass(userId, userPassword);
+		Visitor visitor = new ProxyVisitor(Priorities.VISITOR);
+		User user = visitor.getSimpleUser(userId);
 		
-		System.out.println(result);
-		return null;
+		// 返回json数据
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		String result = user == null ? "user为空" : "success";
+		message.put("result", result);
+		message.put("user", user);
+		out.println(message.toJSONString());
 	}
 	
-	@RequestMapping("setUserInfo")
-	public String setUserInfo(HttpServletRequest request) {
-		int userId = -1;
-		HashMap<String, Object> map = new HashMap<String, Object>();
-		if (request.getParameter("userId") != null) {
-			userId = Integer.parseInt(request.getParameter("userId"));
+	@RequestMapping("setUserInfo.do")
+	public void setUserInfo(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
+		String result = null;
+		if (session.getAttribute("user") == null) {
+			result = "您还未登录";
+			this.logger.error(result);
+		} else {
+			int userId = -1;
+			HashMap<String, Object> map = new HashMap<String, Object>();
+			if (request.getParameter("userId") != null) {
+				userId = Integer.parseInt(request.getParameter("userId"));
+			}
+			if (request.getParameter("userName") != null) {
+				map.put("user_name", request.getParameter("userName"));
+			}
+			if (request.getParameter("userSex") != null) {
+				map.put("user_sex", request.getParameter("userSex"));
+			}
+			if (request.getParameter("userEmail") != null) {
+				map.put("user_email", request.getParameter("userEmail"));
+			}
+			if (request.getParameter("userPhone") != null) {
+				map.put("user_phone", request.getParameter("userPhone"));
+			}
+			if (request.getParameter("userBirthday") != null) {
+				map.put("user_birthday", request.getParameter("userBirthday"));
+			}
+			Visitor visitor = new ProxyVisitor(Priorities.USER);
+			result = visitor.updateUserInfo(userId, map);
+			
+			if ("success".equals(result)) {
+				// 更新session
+				User user = visitor.getUserInfo(userId);
+				session.setAttribute("user", user);
+			}
 		}
-		if (request.getParameter("userName") != null) {
-			map.put("user_name", request.getParameter("userName"));
-		}
-		if (request.getParameter("userSex") != null) {
-			map.put("user_sex", request.getParameter("userSex"));
-		}
-		if (request.getParameter("userEmail") != null) {
-			map.put("user_email", request.getParameter("userEmail"));
-		}
-		if (request.getParameter("userPhone") != null) {
-			map.put("user_phone", request.getParameter("userPhone"));
-		}
-		if (request.getParameter("userBirthday") != null) {
-			map.put("user_birthday", request.getParameter("userBirthday"));
-		}
-		Visitor visitor = new ProxyVisitor(Priorities.USER);
-		String result = visitor.updateUserInfo(userId, map);
 		
-		System.out.println(result);
-		return null;
+		
+		// 返回json数据
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		JSONObject message = new JSONObject();
+		message.put("result", result);
+		out.println(message.toJSONString());
 	}
 	
-	@RequestMapping("setUserAvatar")
-	public String setUserAvatar(HttpServletRequest request) {
+	@RequestMapping("setUserAvatar.do")
+	public void setUserAvatar(HttpSession session, HttpServletRequest request, HttpServletResponse response) throws IOException {
 		// 当天日期
 		String thisDate = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
 		// 返回字符串
@@ -139,8 +249,11 @@ public class Users {
 		// 返回json字符串
 		JSONObject message = new JSONObject();
 		
+		if (session.getAttribute("user") == null) {
+			result = "您还未登录";
+		}
 		// 检测是否是多媒体上传
-		if (!ServletFileUpload.isMultipartContent(request)) {
+		else if (!ServletFileUpload.isMultipartContent(request)) {
 			// 不是多媒体上传
 			result = "Error: 表单必须包含 enctype=multipart/form-data";
 		} else {
@@ -205,6 +318,10 @@ public class Users {
 								
 								// 添加更新后的头像链接
 								message.put("avatarUrl", avatarUrl + fileName);
+								
+								// 更新 session
+								User user = visitor.getUserInfo(userId);
+								session.setAttribute("user", user);
 							}
 						}
 					}
@@ -219,8 +336,11 @@ public class Users {
 		}
 		message.put("result", result);
 		
-		System.out.println(message.toJSONString());
-		return null;
+		
+		// 返回json字符串
+		response.setContentType("application/json; charset=utf-8"); 
+		PrintWriter out = response.getWriter();
+		out.println(message.toJSONString());
 	}
 	
 	/**
@@ -256,7 +376,9 @@ public class Users {
 		
 		// 数据库更新头像链接成功
 		// 解析头像链接，删除以前的头像
-		String[] dicts = oldAvatarUrl.split("/");
+		// winows 与 unix 分隔符不一致
+		String splitReg = File.separator.equals("/") ? "/" : "\\\\";
+		String[] dicts = oldAvatarUrl.split(splitReg);
 		String oldFileName = dicts[dicts.length - 1];
 		if (oldFileName.length() >= 7 && oldFileName.substring(0, 7).equals("default")) {
 			// 默认头像，不删除
@@ -269,4 +391,29 @@ public class Users {
 		}
 		return result;
 	}
+	
+    // 获取用户ip
+    private String getUserIp(HttpServletRequest request){
+        // 优先获取 X-Real-IP
+        String ip = request.getHeader("X-Real-IP");
+        String ERROR_IP = "127.0.0.1";
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+            ip = request.getHeader("x-forwarded-for");
+        }
+        if(ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)){
+            ip = request.getRemoteAddr();
+            if("0:0:0:0:0:0:0:1".equals(ip)){
+                ip = ERROR_IP;
+            }
+        }
+        if("unknown".equalsIgnoreCase(ip)){
+            ip = ERROR_IP;
+            return ip;
+        }
+        int index = ip.indexOf(',');
+        if(index >= 0){
+            ip = ip.substring(0, index);
+        }
+        return ip;
+    }
 }
