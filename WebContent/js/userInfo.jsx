@@ -284,9 +284,9 @@ class UserInformation extends React.Component{
                         <label htmlFor='userBirthday'>生日</label><br />
                         <input type='text' id='userBirthday' name='userBirthday' style={this.props.inputStyle} defaultValue={this.props.userInfo.userBirthday} tabindex='5' /><br />
                         <label htmlFor='userJoinTime'>加入时间</label><br />
-                        <input type='text' id='userJoinTime' name='userJoinTime' disabled='disabled' style={this.props.inputStyle} value={this.props.userInfo.userJoinTime} tabindex='6' /><br />
+                        <input type='text' id='userJoinTime' name='userJoinTime' disabled='disabled' style={this.props.inputStyle} value={this.createTime(this.props.userInfo.userJoinTime)} tabindex='6' /><br />
                         <label htmlFor='userLoginTime'>上次登录时间</label><br />
-                        <input type='text' id='userLoginTime' name='userLoginTime' disabled='disabled' style={this.props.inputStyle} value={this.props.userInfo.userLoginTime} tabindex='7' /><br />
+                        <input type='text' id='userLoginTime' name='userLoginTime' disabled='disabled' style={this.props.inputStyle} value={this.createTime(this.props.userInfo.userLoginTime)} tabindex='7' /><br />
                         <p><button id='updateInfo' style={this.props.updateBtn} onClick={this.handleEditClick}>更新用户信息</button></p>
                     </div>
                     <UserAvatar avatar={this.props.userInfo.userAvatar} userId={this.props.userInfo.userId} 
@@ -295,6 +295,36 @@ class UserInformation extends React.Component{
             </div>
         );
     }
+
+
+    //时间戳转换
+    createTime = (v) => {
+        var date = new Date(v);
+        var y = date.getFullYear();
+        var m = date.getMonth()+1;
+        m = m<10?'0'+m:m;
+
+        var d = date.getDate();
+        d = d<10?("0"+d):d;
+
+        var h = date.getHours();
+        h = h<10?("0"+h):h;
+
+        var M = date.getMinutes();
+        M = M<10?("0"+M):M;
+
+        var oHour = date.getHours()
+        oHour = oHour<10?("0"+oHour):oHour;
+
+        var oMin = date.getMinutes()
+        oMin = oMin<10?("0"+oMin):oMin;
+
+        var oSen = date.getSeconds()
+        oSen = oSen<10?("0"+oSen):oSen;
+
+        var str = y+"-"+m+"-"+d+"  "+oHour+":"+oMin+":"+oSen;
+        return str;
+    };
 }
 
 UserInformation.defaultProps = {
